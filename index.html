@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>数字生命鲁迅</title>
+    <title>鲁迅(接口来自文心一言)</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -268,8 +268,8 @@
         <div id="messages"></div>
     </div>
     <div class="inputContainer">
-        <button id="clearButton">清空对话</button>
-        <textarea id="userInput" placeholder="请输入您的问题..." style="margin-left: auto;"></textarea>
+        <button id="clearButton">清空</button>
+        <textarea id="userInput" placeholder="" style="margin-left: auto;"></textarea>
         <button id="sendButton">发送</button>
     </div>
 
@@ -280,7 +280,7 @@
             const secretKey = 'PLZtxYkPYT1XVwsMvDTslqvdj6WSP7j9';
             const openId = 'user_' + Date.now(); // 生成唯一的外部用户ID
 
-            const messageToSend = `扮演鲁迅回复我：${userInput}`;
+            const messageToSend = `扮演鲁迅的语调回复我：${userInput}`;
 
             const requestData = {
                 message: {
