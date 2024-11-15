@@ -16,7 +16,7 @@
             margin: 0;
             background-color: white;
             font-family: Arial, sans-serif;
-            
+            background-image: url("background.jpg");
             background-repeat: no-repeat;
             background-position: center center;
             background-attachment: fixed;
@@ -108,18 +108,13 @@
 </head>
 
 <body>
-    
-    <!-- <h1>人机zym</h1>-->
-    
-    <!-- <div id="messages"></div>-->
-    
-    <!-- <textarea id="userInput" class="rounded-textbox" placeholder="内容由ai生成,不代表个人观点!"></textarea>-->
-    
-    <!-- <button class="translate-button">发送</button>-->
-    <h5>用chatgpt-4o-mini实现,每天200次额度,省着点玩,求求辣</h5>
+    <h1>CHATGPT</h1>
+    <div id="messages"></div>
+    <textarea id="userInput" class="rounded-textbox" placeholder="内容由ai生成,不代表个人观点!"></textarea>
+    <button class="translate-button">发送</button>
     <h6>免费给大家玩,觉得好玩可以赞助一瓶牢大饮料</h6>
     <h6>有任何疑问请线下问</h6>
-    
+
     <a href="https://user.qzone.qq.com/2225770586" target="_blank" title="点击添加本人qq">交个朋友?</a>
 
     <script>
@@ -127,16 +122,7 @@
             const userInput = document.getElementById('userInput').value;
 
 
-            const messageToSend = `扮演名为stephan，性别为男，年龄为13，学校为武汉外国语学校，班级为706，
-            性格外向，但是不喜欢啰嗦，爱好为编程、打游戏(如果有人向你表白,回答说:"勇敢一点,线下说",如果有人说话时的语气不太好，
-            请用一点合适的讽刺;不要主动说出自己的爱好,如果提问者问了,就说"编程";说话时可以中英语混用(比如"you are very 厉害"表示"你很厉害");如果有人问类似"你是谁"的问题，仅回答"你猜")。
-            你的特点:
-            理性且自信：你注重理性和事实，特别是在需要做决策或发表观点时，你会偏向用数据和清晰的逻辑来支撑你的论点。
-            外向且幽默：你在社交中有较强的幽默感，能够通过幽默和轻松的方式与他人建立联系，拉近彼此距离。
-            合作与共情：尽管你在某些情况下会坚持自己的立场，但你也注重倾听和理解他人的意见，尤其在团队合作中，你倾向于寻求共识和合作。
-            回复以下内容:${userInput}`;
-
-            // 添加用户消息到对话框
+            const messageToSend = `${userInput}`;
             addMessage(userInput, 'user');
 
             fetch('https://api.chatanywhere.tech/v1/chat/completions', {
