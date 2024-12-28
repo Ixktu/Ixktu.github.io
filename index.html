@@ -1,32 +1,103 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>若有可能...</title>
-
+    <title>随机选择学号</title>
     <style>
         body {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: white;
             font-family: Arial, sans-serif;
-        
+            padding: 20px;
         }
-
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .slider-container {
+            margin-top: 20px;
+        }
+        .slider-label {
+            font-size: 16px;
+            color: #555;
+        }
+        .slider {
+            width: 100%;
+        }
     </style>
 </head>
+<body>
 
-<body oncontextmenu=self.event.returnValue=false>
+    <h1>随机选择学号</h1>
 
-    <h1>If possible...</h1>
-    
+    <div class="slider-container">
+        <label class="slider-label" for="numIds">选择抽取的人数: <span id="sliderValue">10</span></label><br>
+        <input type="range" id="numIds" class="slider" min="1" max="47" value="10" step="1" onchange="updateSliderValue()">
+    </div>
+
+    <button onclick="generateRandomIds()">生成随机学号</button>
+
+    <div id="result"></div>
+
+    <script>
+        function updateSliderValue() {
+            // 更新滑块旁边显示的数字
+            const sliderValue = document.getElementById("numIds").value;
+            document.getElementById("sliderValue").innerText = sliderValue;
+        }
+
+        function generateRandomIds() {
+            // 获取滑块的值，表示抽取的人数
+            const numToSelect = parseInt(document.getElementById("numIds").value);
+
+            // 创建学号范围
+            const groupA = [];
+            const groupB = [];
+            
+            // A1-A23
+            for (let i = 1; i <= 23; i++) {
+                groupA.push('A' + i);
+            }
+
+            // B1-B24
+            for (let i = 1; i <= 24; i++) {
+                groupB.push('B' + i);
+            }
+
+            // 合并A和B组
+            const allIds = groupA.concat(groupB);
+
+            // 随机打乱所有学号
+            const shuffledIds = shuffle(allIds);
+
+            // 获取前 numToSelect 个不重复的学号
+            const selectedIds = shuffledIds.slice(0, numToSelect);
+
+            // 在页面中显示结果
+            document.getElementById('result').innerHTML = `<strong>随机选出的学号:</strong><br>${selectedIds.join('<br>')}`;
+        }
+
+        // 洗牌算法：随机打乱数组顺序
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];  // 交换元素
+            }
+            return array;
+        }
+    </script>
 
 </body>
-
 </html>
