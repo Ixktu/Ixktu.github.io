@@ -84,10 +84,12 @@
             margin-right: 15px;
         }
     </style>
+    <!-- 包含Markdown解析器库 -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
     <div class="chat-container">
-        <h1>AI历史老师</h1>
+        <h1>AI历史老师❤️</h1>
         <div class="model-selector">
             <strong>选择模型:</strong>
             <label class="model-option">
@@ -99,12 +101,12 @@
         </div>
         <div class="chat-box" id="chat-box">
             <div class="message bot-message">
-                你好！我是你的AI历史老师，你可以问我任何和历史相关的问题？
+                你好!我是你的AI历史老师📖,你可以问我任何和历史相关的问题!
             </div>
         </div>
         <div class="input-area">
             <input type="text" id="user-input" placeholder="输入你的问题..." autocomplete="off">
-            <button id="send-button" onclick="sendMessage()">发送</button>
+            <button id="send-button" onclick="sendMessage()">发送🚀</button>
         </div>
     </div>
 
@@ -135,9 +137,6 @@
             displayMessage(message, 'user');
             userInput.value = '';
             
-            // 显示加载状态
-            const loadingId = displayMessage('思考中...', 'bot', true);
-            
             try {
                 // 在用户消息前添加提示词
                 const prompt = `现在，你是我的历史老师，我是七年级下学期的，你不需要繁琐的分条列举，只需要用通俗易懂的语言和形象的比喻来解释我不懂的问题，我的问题是: ${message}`;
@@ -164,21 +163,16 @@
                 
                 const data = await response.json();
                 
-                // 移除加载状态
-                removeMessage(loadingId);
-                
                 if (data.choices && data.choices.length > 0) {
                     // 显示AI回复
                     const reply = data.choices[0].message.content;
-                    displayMessage(reply, 'bot');
+                    displayMessage(reply, 'bot', true); // 使用Markdown解析
                 } else {
                     displayMessage("抱歉，我没有得到有效的回复。", 'bot');
                 }
             } catch (error) {
                 console.error('Error:', error);
-                // 移除加载状态
-                removeMessage(loadingId);
-                displayMessage("抱歉，发生了错误: " + error.message, 'bot');
+                displayMessage("抱歉，发生了错误❌: " + error.message, 'bot');
             } finally {
                 // 重新启用按钮和输入框
                 userInput.disabled = false;
@@ -187,27 +181,23 @@
             }
         }
         
-        function displayMessage(text, sender, isLoading = false) {
+        function displayMessage(text, sender, isMarkdown = false) {
             const chatBox = document.getElementById('chat-box');
             const messageDiv = document.createElement('div');
             const messageId = 'msg-' + Date.now();
             
             messageDiv.id = messageId;
             messageDiv.className = `message ${sender}-message`;
-            if (isLoading) messageDiv.className += ' loading';
             
-            messageDiv.textContent = text;
+            if (isMarkdown) {
+                // 使用marked.js解析Markdown
+                messageDiv.innerHTML = marked(text);
+            } else {
+                messageDiv.textContent = text;
+            }
+            
             chatBox.appendChild(messageDiv);
             chatBox.scrollTop = chatBox.scrollHeight;
-            
-            return messageId;
-        }
-        
-        function removeMessage(id) {
-            const message = document.getElementById(id);
-            if (message) {
-                message.remove();
-            }
         }
     </script>
 </body>
