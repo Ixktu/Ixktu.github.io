@@ -1,103 +1,214 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>随机选择学号</title>
+    <title>AI历史老师</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
             padding: 20px;
+            background-color: #f5f5f5;
         }
-        #result {
-            margin-top: 20px;
-            font-size: 18px;
-            color: #333;
+        .chat-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
         }
-        button {
-            padding: 10px 20px;
+        .chat-box {
+            height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            background-color: #fafafa;
+        }
+        .message {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .user-message {
+            background-color: #e3f2fd;
+            margin-left: 20%;
+            text-align: right;
+        }
+        .bot-message {
+            background-color: #f1f1f1;
+            margin-right: 20%;
+        }
+        .input-area {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        #user-input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
             font-size: 16px;
-            cursor: pointer;
+        }
+        #send-button {
+            padding: 10px 20px;
             background-color: #4CAF50;
             color: white;
             border: none;
             border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
         }
-        button:hover {
+        #send-button:hover {
             background-color: #45a049;
         }
-        .slider-container {
-            margin-top: 20px;
+        #send-button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
         }
-        .slider-label {
-            font-size: 16px;
-            color: #555;
+        .loading {
+            color: #666;
+            font-style: italic;
         }
-        .slider {
-            width: 100%;
+        .model-selector {
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+        .model-option {
+            margin-right: 15px;
         }
     </style>
 </head>
 <body>
-
-    <h1>随机选择学号</h1>
-
-    <div class="slider-container">
-        <label class="slider-label" for="numIds">选择抽取的人数: <span id="sliderValue">10</span></label><br>
-        <input type="range" id="numIds" class="slider" min="1" max="47" value="10" step="1" onchange="updateSliderValue()">
+    <div class="chat-container">
+        <h1>AI历史老师</h1>
+        <div class="model-selector">
+            <strong>选择模型:</strong>
+            <label class="model-option">
+                <input type="radio" name="model" value="gpt-4o-mini" checked> GPT-4o Mini
+            </label>
+            <label class="model-option">
+                <input type="radio" name="model" value="deepseek-v3"> DeepSeek V3
+            </label>
+        </div>
+        <div class="chat-box" id="chat-box">
+            <div class="message bot-message">
+                你好！我是你的AI历史老师，你可以问我任何和历史相关的问题？
+            </div>
+        </div>
+        <div class="input-area">
+            <input type="text" id="user-input" placeholder="输入你的问题..." autocomplete="off">
+            <button id="send-button" onclick="sendMessage()">发送</button>
+        </div>
     </div>
 
-    <button onclick="generateRandomIds()">生成随机学号</button>
-
-    <div id="result"></div>
-
     <script>
-        function updateSliderValue() {
-            // 更新滑块旁边显示的数字
-            const sliderValue = document.getElementById("numIds").value;
-            document.getElementById("sliderValue").innerText = sliderValue;
-        }
-
-        function generateRandomIds() {
-            // 获取滑块的值，表示抽取的人数
-            const numToSelect = parseInt(document.getElementById("numIds").value);
-
-            // 创建学号范围
-            const groupA = [];
-            const groupB = [];
+        // 替换为你的实际API密钥
+        const API_KEY = 'sk-9jqhDiwuU02ynFOb9Ot57NiPeigFOh09JNBh8d2T22pQ4Iwj';
+        // 替换为你的API端点
+        const API_ENDPOINT = 'https://api.chatanywhere.tech/v1/chat/completions';
+        
+        // 按下Enter键发送消息
+        document.getElementById('user-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+        
+        async function sendMessage() {
+            const userInput = document.getElementById('user-input');
+            const message = userInput.value.trim();
             
-            // A1-A23
-            for (let i = 1; i <= 23; i++) {
-                groupA.push('A' + i);
+            if (!message) return;
+            
+            // 禁用按钮和输入框
+            userInput.disabled = true;
+            document.getElementById('send-button').disabled = true;
+            
+            // 显示用户消息
+            displayMessage(message, 'user');
+            userInput.value = '';
+            
+            // 显示加载状态
+            const loadingId = displayMessage('思考中...', 'bot', true);
+            
+            try {
+                // 在用户消息前添加提示词
+                const prompt = `现在，你是我的历史老师，我是七年级下学期的，你不需要繁琐的分条列举，只需要用通俗易懂的语言和形象的比喻来解释我不懂的问题，我的问题是: ${message}`;
+                
+                // 获取选择的模型
+                const selectedModel = document.querySelector('input[name="model"]:checked').value;
+                
+                // 调用ChatGPT API
+                const response = await fetch(API_ENDPOINT, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${API_KEY}`
+                    },
+                    body: JSON.stringify({
+                        model: selectedModel,
+                        messages: [{
+                            role: "user",
+                            content: prompt
+                        }],
+                        temperature: 0.9
+                    })
+                });
+                
+                const data = await response.json();
+                
+                // 移除加载状态
+                removeMessage(loadingId);
+                
+                if (data.choices && data.choices.length > 0) {
+                    // 显示AI回复
+                    const reply = data.choices[0].message.content;
+                    displayMessage(reply, 'bot');
+                } else {
+                    displayMessage("抱歉，我没有得到有效的回复。", 'bot');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                // 移除加载状态
+                removeMessage(loadingId);
+                displayMessage("抱歉，发生了错误: " + error.message, 'bot');
+            } finally {
+                // 重新启用按钮和输入框
+                userInput.disabled = false;
+                document.getElementById('send-button').disabled = false;
+                userInput.focus();
             }
-
-            // B1-B24
-            for (let i = 1; i <= 24; i++) {
-                groupB.push('B' + i);
-            }
-
-            // 合并A和B组
-            const allIds = groupA.concat(groupB);
-
-            // 随机打乱所有学号
-            const shuffledIds = shuffle(allIds);
-
-            // 获取前 numToSelect 个不重复的学号
-            const selectedIds = shuffledIds.slice(0, numToSelect);
-
-            // 在页面中显示结果
-            document.getElementById('result').innerHTML = `<strong>随机选出的学号:</strong><br>${selectedIds.join('<br>')}`;
         }
-
-        // 洗牌算法：随机打乱数组顺序
-        function shuffle(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];  // 交换元素
+        
+        function displayMessage(text, sender, isLoading = false) {
+            const chatBox = document.getElementById('chat-box');
+            const messageDiv = document.createElement('div');
+            const messageId = 'msg-' + Date.now();
+            
+            messageDiv.id = messageId;
+            messageDiv.className = `message ${sender}-message`;
+            if (isLoading) messageDiv.className += ' loading';
+            
+            messageDiv.textContent = text;
+            chatBox.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+            
+            return messageId;
+        }
+        
+        function removeMessage(id) {
+            const message = document.getElementById(id);
+            if (message) {
+                message.remove();
             }
-            return array;
         }
     </script>
-
 </body>
 </html>
