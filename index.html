@@ -140,7 +140,7 @@
             
             try {
                 // 在用户消息前添加提示词
-                const prompt = `现在，你是我的历史老师，我是七年级下学期的，你不需要繁琐的分条列举，只需要用通俗易懂的语言和形象的比喻来解释我不懂的问题，我的问题是: ${message}`;
+                const prompt = `现在，你是我的历史老师，我是七年级下学期的，你不需要繁琐的分条列举，只需要用通俗易懂的语言和形象的比喻来解释我不懂的问题，先直接给出答案，再给出讲解，我的问题是: ${message}`;
                 
                 // 获取选择的模型
                 const selectedModel = document.querySelector('input[name="model"]:checked').value;
