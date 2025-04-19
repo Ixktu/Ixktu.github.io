@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI历史老师</title>
+    <title>AI老师</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -56,7 +56,7 @@
         }
         #send-button {
             padding: 10px 20px;
-            background-color: #4CAF50;
+            background-color: #00B3FF;
             color: white;
             border: none;
             border-radius: 5px;
@@ -64,10 +64,10 @@
             font-size: 16px;
         }
         #send-button:hover {
-            background-color: #45a049;
+            background-color: #0069FF;
         }
         #send-button:disabled {
-            background-color: #cccccc;
+            background-color: #FF0004;
             cursor: not-allowed;
         }
         .loading {
@@ -120,29 +120,49 @@
     </style>
 </head>
 <body>
-    <div class="chat-container">
-        <h1>AI历史老师</h1>
-        <div class="model-selector">
-            <strong>选择模型:</strong>
-            <label class="model-option">
-                <input type="radio" name="model" value="gpt-4" checked> GPT-4
-            </label>
-            <label class="model-option">
-                <input type="radio" name="model" value="deepseek-v3"> DeepSeek V3
-            </label>
-        </div>
+<div class="chat-container">
+      <h1>AI老师📕</h1>
+      <div class="model-selector">
+        <strong>选择模型🌏</strong>
+	<br></br>
+	<label class="model-option">
+                <input type="radio" name="model" value="gpt-3.5-turbo">
+        Chatgpt-3.5-turbo     
+        </label>
+        <label class="model-option">
+                <input type="radio" name="model" value="gpt-4o-mini" checked>
+        Chatgpt-4o-mini
+        </label>
+	<label class="model-option">
+                <input type="radio" name="model" value="gpt-4o">
+        Chatgpt-4o      
+        </label>
+
+	
+	<br></br>
+	<label class="model-option">
+                <input type="radio" name="model" value="deepseek-r1">
+        DeepSeek-R1       
+        </label>
+        <label class="model-option">
+                <input type="radio" name="model" value="deepseek-v3">
+        DeepSeek-V3       
+        </label>
+	
+
+      </div>
         <div class="chat-box" id="chat-box">
-            <div class="message bot-message">
-                你好!我是你的AI历史老师,你可以问我任何和历史相关的问题!
+            你好👋!我是你的AI🤖老师,你可以问我任何和学习📕相关的问题!
             </div>
         </div>
-        <div class="input-area">
-            <input type="text" id="user-input" placeholder="输入你的问题..." autocomplete="off">
+  <div class="input-area">
+    <input type="text" id="user-input" placeholder="输入你的问题..." autocomplete="off">
             <button id="send-button" onclick="sendMessage()">发送🚀</button>
-        </div>
-    </div>
+      </div>
+      
+</div>
 
-    <script>
+<script>
         // 替换为你的实际API密钥
         const API_KEY = 'sk-9jqhDiwuU02ynFOb9Ot57NiPeigFOh09JNBh8d2T22pQ4Iwj';
         // 替换为你的API端点
@@ -169,7 +189,7 @@
             
             try {
                 // 在用户消息前添加提示词
-                const prompt = `现在，你是我的历史老师，我是七年级下学期的，你不需要繁琐的分条列举，只需要用通俗易懂的语言和形象的比喻来解释我不懂的问题，先直接给出答案，再给出讲解，我的问题是: ${message}`;
+                const prompt = `现在，你是我的老师，我会问你一些问题，你不需要繁琐的分条列举，只需要用通俗易懂的语言和形象的比喻来解释我不懂的问题，先直接给出答案，再给出讲解，我的问题是: ${message}`;
                 
                 // 获取选择的模型
                 const selectedModel = document.querySelector('input[name="model"]:checked').value;
