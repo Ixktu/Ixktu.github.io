@@ -3,293 +3,345 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>恩情语文作业下载器</title>
+    <title>人人报社 - 记录真实，传递价值</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            font-family: 'Times New Roman', '宋体', serif;
         }
         
         body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+            background-color: #f8f5e9;
+            color: #333;
+            line-height: 1.6;
         }
         
-        .container {
+        /* 头部样式 */
+        header {
+            padding: 1.5rem 2rem;
             background-color: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(211, 47, 47, 0.2);
-            width: 100%;
-            max-width: 500px;
-            padding: 30px;
-            text-align: center;
-            border-top: 5px solid #d32f2f;
+            border-bottom: 1px solid #eaeaea;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
         
-        h1 {
-            color: #c62828;
-            margin-bottom: 10px;
-            font-size: 28px;
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
         }
         
-        .description {
-            color: #7f8c8d;
-            margin-bottom: 25px;
-            line-height: 1.5;
+        .logo-link {
+            display: inline-block;
+            text-decoration: none;
         }
         
-        .date-picker {
-            margin: 25px 0;
-            text-align: left;
-        }
-        
-        label {
+        .logo-image {
+            height: 4rem; /* 增大logo */
+            width: auto;
             display: block;
-            margin-bottom: 8px;
-            color: #c62828;
-            font-weight: bold;
+            max-height: 5rem;
+            object-fit: contain;
         }
         
-        input[type="date"] {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
+        /* 主要内容区 */
+        .container {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 0 2rem;
+        }
+        
+        .page-title {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 3rem; /* 增大标题 */
+            color: #2c3e50;
+            position: relative;
+            padding-bottom: 20px;
+        }
+        
+        .page-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px; /* 增大下划线 */
+            height: 4px;
+            background-color: #c0392b;
+        }
+        
+        /* 报纸列表样式 */
+        .newspaper-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); /* 增大卡片尺寸 */
+            gap: 40px;
+        }
+        
+        .newspaper-item {
+            background-color: white;
             border-radius: 8px;
-            font-size: 16px;
-            transition: all 0.3s;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s, box-shadow 0.3s;
         }
         
-        input[type="date"]:focus {
-            border-color: #d32f2f;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.2);
+        .newspaper-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
         }
         
-        .info-box {
-            background-color: #ffebee;
-            border-radius: 8px;
-            padding: 15px;
-            margin: 20px 0;
-            text-align: left;
-            border-left: 4px solid #d32f2f;
+        .newspaper-image {
+            height: 280px; /* 增大图片区域 */
+            background-color: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #777;
+            font-size: 1.5rem;
+            background-size: cover;
+            background-position: center;
         }
         
-        .info-box h3 {
-            color: #c62828;
-            margin-bottom: 8px;
-            font-size: 18px;
+        .newspaper-content {
+            padding: 30px;
         }
         
-        .info-box p {
+        .newspaper-title {
+            font-size: 1.8rem; /* 增大标题 */
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        
+        .newspaper-date {
             color: #7f8c8d;
-            margin-bottom: 5px;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
         }
         
-        .btn {
-            background-color: #d32f2f;
+        .newspaper-excerpt {
+            color: #555;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            font-size: 1.1rem;
+        }
+        
+        .read-more {
+            display: inline-block;
+            background-color: #c0392b;
             color: white;
-            border: none;
             padding: 12px 25px;
-            border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s;
-            width: 100%;
+            border-radius: 5px;
+            text-decoration: none;
             font-weight: bold;
-            margin-top: 10px;
+            font-size: 1.1rem;
+            transition: background-color 0.3s;
         }
         
-        .btn:hover {
-            background-color: #b71c1c;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(183, 28, 28, 0.3);
+        .read-more:hover {
+            background-color: #e74c3c;
         }
         
-        .btn:active {
-            transform: translateY(0);
+        /* 页脚样式 */
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 50px 0 30px;
+            margin-top: 70px;
         }
         
-        .btn:disabled {
-            background-color: #bdc3c7;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* 增大页脚区域 */
+            gap: 40px;
+            padding: 0 2rem;
         }
         
-        .date-range {
-            color: #7f8c8d;
-            font-size: 14px;
-            margin-top: 5px;
+        .footer-section h3 {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            color: #c0392b;
+            position: relative;
+            padding-bottom: 15px;
         }
         
-        .error-message {
-            color: #d32f2f;
-            margin-top: 10px;
-            font-size: 14px;
-            display: none;
+        .footer-section h3:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: #c0392b;
         }
         
-        .loading {
-            display: none;
-            margin-top: 15px;
-            color: #d32f2f;
+        .footer-section p, .footer-section a {
+            color: #ecf0f1;
+            margin-bottom: 15px;
+            display: block;
+            text-decoration: none;
+            font-size: 1.1rem;
         }
         
-        .contact-info {
-            color: #d32f2f;
-            font-weight: bold;
+        .footer-section a:hover {
+            color: #c0392b;
+        }
+        
+        .copyright {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 25px;
+            border-top: 1px solid #34495e;
+            color: #bdc3c7;
+            font-size: 1rem;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .header-container {
+                justify-content: center;
+            }
+            
+            .logo-image {
+                height: 3rem;
+                max-height: 3.5rem;
+            }
+            
+            .page-title {
+                font-size: 2.2rem;
+            }
+            
+            .newspaper-list {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .newspaper-image {
+                height: 220px;
+            }
+        }
+
+        /* 2K屏幕优化 */
+        @media (min-width: 1920px) {
+            .header-container {
+                max-width: 1600px;
+            }
+            
+            .container {
+                max-width: 1600px;
+            }
+            
+            .newspaper-list {
+                grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+                gap: 50px;
+            }
+            
+            .footer-container {
+                max-width: 1600px;
+            }
+        }
+
+        /* 4K屏幕优化 */
+        @media (min-width: 2560px) {
+            .header-container {
+                max-width: 2000px;
+            }
+            
+            .container {
+                max-width: 2000px;
+            }
+            
+            .newspaper-list {
+                grid-template-columns: repeat(auto-fill, minmax(550px, 1fr));
+                gap: 60px;
+            }
+            
+            .footer-container {
+                max-width: 2000px;
+            }
+            
+            .logo-image {
+                height: 5rem;
+                max-height: 6rem;
+            }
+            
+            .page-title {
+                font-size: 3.5rem;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- 头部 -->
+    <header>
+        <div class="header-container">
+            <a href="#" class="logo-link">
+                <!-- 替换为您的报社logo图片 -->
+                <img src="logo.png" 
+                     alt="人人报社" class="logo-image">
+            </a>
+        </div>
+    </header>
+
+    <!-- 主要内容 -->
     <div class="container">
-        <h1>恩情语文作业下载器</h1>
-        <p class="description">选择2011年1月1日至2012年12月31日之间的日期</p>
+        <h2 class="page-title">最新报刊</h2>
         
-        <div class="date-picker">
-            <label for="date-input">选择日期：</label>
-            <input type="date" id="date-input" min="2011-01-01" max="2012-12-31">
-            <p class="date-range">可选日期范围：2011-01-01 至 2012-12-31</p>
-        </div>
-        
-        <div class="info-box">
-            <h3>下载信息</h3>
-            <p><strong>所选日期：</strong> <span id="selected-date">未选择</span></p>
-            <p><strong>资源链接：</strong> <span id="pdf-url">请先选择日期</span></p>
-            <p><strong>联系方式：</strong> <span class="contact-info">(+44) 079 3324 2406</span></p>
-        </div>
-        
-        <div class="error-message" id="error-message">
-            请选择有效的日期
-        </div>
-        
-        <button class="btn" id="download-btn" disabled>下载PDF</button>
-        
-        <div class="loading" id="loading">
-            正在准备下载...
+        <div class="newspaper-list">
+            <!-- 报纸项目1 -->
+            <div class="newspaper-item">
+                <div class="newspaper-image" style="background-image: url('peopeo.png');">
+                    <!-- 图片背景 -->
+                </div>
+                <div class="newspaper-content">
+                    <h3 class="newspaper-title">人人日报</h3>
+                    <p class="newspaper-date">2011年11月14日(是的我穿越了)</p>
+                    <p class="newspaper-excerpt">本期聚焦2011年11月14日的人民日报</p>
+                    <a href="peopeo.png" class="read-more">阅读全文</a>
+                </div>
+            </div>
+            
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const dateInput = document.getElementById('date-input');
-            const selectedDateSpan = document.getElementById('selected-date');
-            const pdfUrlSpan = document.getElementById('pdf-url');
-            const downloadBtn = document.getElementById('download-btn');
-            const errorMessage = document.getElementById('error-message');
-            const loading = document.getElementById('loading');
-
-            // 设置默认日期
-            dateInput.value = '2011-11-14';
-            updateDateInfo();
+    <!-- 页脚 -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>关于我们</h3>
+                <p>人人报社成立于25年国庆节放假期间,致力于做出优秀的语文作业,记录时代变迁,传递社会价值。</p>
+            </div>
             
-            dateInput.addEventListener('change', function() {
-                updateDateInfo();
-            });
+            <div class="footer-section">
+                <h3>联系我们</h3>
+                <p>地址：武汉市光谷大道46号</p>
+                <p>电话：(+44)07933 242406</p>
+                <p>邮箱：zym.qwq@gmail.com</p>
+            </div>
             
-            downloadBtn.addEventListener('click', function() {
-                const selectedDate = dateInput.value;
-                if (isValidDate(selectedDate)) {
-                    downloadPDF(selectedDate);
-                } else {
-                    showError('请选择有效的日期');
-                }
-            });
+            <div class="footer-section">
+                <h3>快速链接</h3>
+                <a href="#">首页</a>
+                <a href="#">新闻中心</a>
+                <a href="#">专题报道</a>
+                <a href="#">投稿指南</a>
+            </div>
             
-            function updateDateInfo() {
-                const selectedDate = dateInput.value;
-                
-                if (isValidDate(selectedDate)) {
-                    selectedDateSpan.textContent = formatDate(selectedDate);
-                    
-                    const year = selectedDate.substring(0, 4);
-                    const formattedDate = selectedDate.replace(/-/g, '');
-                    const pdfUrl = `https://1314955862-79a3hvoqxc-bj.scf.tencentcs.com/RMRB/${year}/${formattedDate}.pdf`;
-                    
-                    pdfUrlSpan.textContent = pdfUrl;
-                    downloadBtn.disabled = false;
-                    hideError();
-                    
-                    // 预先检查链接是否可用
-                    checkLinkAvailability(pdfUrl);
-                } else {
-                    selectedDateSpan.textContent = '未选择';
-                    pdfUrlSpan.textContent = '请先选择日期';
-                    downloadBtn.disabled = true;
-                }
-            }
-            
-            function isValidDate(dateString) {
-                if (!dateString) return false;
-                
-                const date = new Date(dateString);
-                const minDate = new Date('2011-01-01');
-                const maxDate = new Date('2012-12-31');
-                
-                return date >= minDate && date <= maxDate;
-            }
-            
-            function formatDate(dateString) {
-                const date = new Date(dateString);
-                const year = date.getFullYear();
-                const month = String(date.getMonth() + 1).padStart(2, '0');
-                const day = String(date.getDate()).padStart(2, '0');
-                return `${year}年${month}月${day}日`;
-            }
-            
-            function downloadPDF(dateString) {
-                loading.style.display = 'block';
-                downloadBtn.disabled = true;
-                
-                const year = dateString.substring(0, 4);
-                const formattedDate = dateString.replace(/-/g, '');
-                const pdfUrl = `https://1314955862-79a3hvoqxc-bj.scf.tencentcs.com/RMRB/${year}/${formattedDate}.pdf`;
-                
-                // 创建下载链接
-                const a = document.createElement('a');
-                a.href = pdfUrl;
-                a.download = `RMRB_${formattedDate}.pdf`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
+            <div class="footer-section">
+                <h3>关注我们</h3>
+                <a href="https://player.bilibili.com/player.html?isOutside=true&aid=80433022&bvid=BV1GJ411x7h7&cid=137649199&p=1">还真没有</a>
+            </div>
+        </div>
         
-                setTimeout(function() {
-                    loading.style.display = 'none';
-                    downloadBtn.disabled = false;
-                }, 1000);
-            }
-            
-            function checkLinkAvailability(url) {
-                // 检查链接是否可访问
-                fetch(url, { method: 'HEAD' })
-                    .then(response => {
-                        if (!response.ok) {
-                            showError('该日期的资源可能不存在或链接已失效');
-                            downloadBtn.disabled = true;
-                        }
-                    })
-                    .catch(error => {
-                        console.log('链接检查失败:', error);
-                        showError('网络连接问题，请检查链接是否有效');
-                        downloadBtn.disabled = true;
-                    });
-            }
-            
-            function showError(message) {
-                errorMessage.textContent = message;
-                errorMessage.style.display = 'block';
-            }
-            
-            function hideError() {
-                errorMessage.style.display = 'none';
-            }
-        });
-    </script>
+        <div class="copyright">
+            <p>&copy; 2025 人人报社 版权所有</p>
+        </div>
+    </footer>
 </body>
 </html>
