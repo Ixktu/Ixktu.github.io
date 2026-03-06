@@ -3,322 +3,316 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>24点</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<title>Math 24 · 武汉外校数学文化节</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&family=Barlow+Condensed:wght@700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #f4f1ec;
-    --surface: #ffffff;
-    --border: #ddd9d1;
-    --text: #2c2824;
-    --text2: #8a837a;
-    --accent: #3d6b5e;
-    --accent-light: #e8f0ee;
-    --shadow: 0 1px 3px rgba(44,40,36,0.08), 0 4px 16px rgba(44,40,36,0.06);
-    --shadow-card: 0 2px 8px rgba(44,40,36,0.1);
-    --easy:   #4a9b6f;
-    --medium: #c4874a;
-    --hard:   #b04a4a;
-    --scale: 1;
-  }
+:root {
+  --bg: #f4f1ec; --surface: #fff; --border: #ddd9d1;
+  --text: #2c2824; --text2: #8a837a;
+  --accent: #3d6b5e; --accent-light: #e8f0ee;
+  --shadow: 0 1px 3px rgba(44,40,36,.08),0 4px 16px rgba(44,40,36,.06);
+  --shadow-card: 0 2px 8px rgba(44,40,36,.1);
+  --easy: #4a9b6f; --medium: #c4874a; --hard: #b04a4a;
+  --scale: 1;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh; transition: background .3s;
+  overflow-x: hidden;
+}
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 32px 20px;
-    transition: background 0.3s;
-  }
+/* ══════════════════════════════════
+   NORMAL MODE
+══════════════════════════════════ */
+.normal-view {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  min-height: 100vh; padding: 32px 20px;
+}
+.scale-wrap {
+  transform: scale(var(--scale));
+  transform-origin: top center;
+  width: 100%; display: flex; justify-content: center;
+}
+.container { width: 100%; max-width: 480px; }
 
-  /* ── Scale wrapper ── */
-  .scale-wrap {
-    transform: scale(var(--scale));
-    transform-origin: top center;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-  }
+header { text-align: center; margin-bottom: 36px; }
+.title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 72px; color: var(--text); line-height: 1; letter-spacing: -2px;
+}
+.title span { color: var(--accent); }
+.subtitle {
+  font-size: 11px; color: var(--text2);
+  letter-spacing: 4px; text-transform: uppercase; margin-top: 8px; font-weight: 300;
+}
 
-  .container { width: 100%; max-width: 480px; }
+/* Score */
+.score-bar {
+  display: flex; gap: 1px; background: var(--border);
+  border-radius: 14px; overflow: hidden; margin-bottom: 20px; box-shadow: var(--shadow);
+}
+.score-item { flex: 1; background: var(--surface); padding: 14px 10px; text-align: center; }
+.score-item:first-child { border-radius: 14px 0 0 14px; }
+.score-item:last-child  { border-radius: 0 14px 14px 0; }
+.score-val { font-family: 'DM Serif Display', serif; font-size: 26px; color: var(--accent); line-height: 1; }
+.score-lbl { font-size: 10px; color: var(--text2); letter-spacing: 2px; text-transform: uppercase; margin-top: 3px; }
 
-  header { text-align: center; margin-bottom: 36px; }
-  .title {
-    font-family: 'DM Serif Display', serif;
-    font-size: 72px; color: var(--text);
-    line-height: 1; letter-spacing: -2px;
-  }
-  .title span { color: var(--accent); }
-  .subtitle {
-    font-size: 11px; color: var(--text2);
-    letter-spacing: 4px; text-transform: uppercase;
-    margin-top: 8px; font-weight: 300;
-  }
+/* Difficulty */
+.difficulty-wrap {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 16px; padding: 16px 20px; margin-bottom: 20px; box-shadow: var(--shadow);
+}
+.diff-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.diff-label { font-size: 10px; color: var(--text2); letter-spacing: 3px; text-transform: uppercase; font-weight: 500; }
+.diff-name { font-size: 12px; font-weight: 500; letter-spacing: 1px; transition: color .3s; }
+.diff-name.easy   { color: var(--easy); }
+.diff-name.medium { color: var(--medium); }
+.diff-name.hard   { color: var(--hard); }
+.slider-track { position: relative; height: 6px; background: var(--border); border-radius: 6px; margin: 4px 0 14px; }
+.slider-fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 6px; transition: width .25s, background .3s; }
+input[type=range].diff-range {
+  position: absolute; width: 100%; top: 50%; transform: translateY(-50%);
+  -webkit-appearance: none; appearance: none; background: transparent; cursor: pointer; margin: 0;
+}
+input[type=range].diff-range::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%;
+  background: var(--surface); border: 2px solid currentColor;
+  box-shadow: 0 1px 4px rgba(0,0,0,.15); transition: transform .15s;
+}
+input[type=range].diff-range::-webkit-slider-thumb:hover { transform: scale(1.15); }
+input[type=range].diff-range::-moz-range-thumb {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--surface); border: 2px solid currentColor; cursor: pointer;
+}
+.diff-ticks { display: flex; justify-content: space-between; padding: 0 2px; }
+.diff-tick { font-size: 10px; color: var(--text2); }
 
-  /* ── Controls bar (theme + size) ── */
-  .controls-bar {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-  }
+/* Number cards (normal) */
+.numbers-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 24px;
+}
+.num-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+  aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+  font-family: 'DM Serif Display', serif; font-size: clamp(32px,7vw,44px); color: var(--text);
+  box-shadow: var(--shadow-card); animation: slideIn .4s cubic-bezier(.22,1,.36,1) both; position: relative;
+}
+.num-card::after {
+  content: ''; position: absolute; bottom: 9px; left: 50%; transform: translateX(-50%);
+  width: 18px; height: 2px; border-radius: 2px; opacity: .35; background: var(--accent);
+}
+.num-card:nth-child(1){animation-delay:.00s}
+.num-card:nth-child(2){animation-delay:.06s}
+.num-card:nth-child(3){animation-delay:.12s}
+.num-card:nth-child(4){animation-delay:.18s}
+@keyframes slideIn { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
 
-  .ctrl-panel {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 12px 16px;
-    box-shadow: var(--shadow);
-    flex: 1;
-  }
+/* Answers */
+.answer-section {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 20px; padding: 22px; margin-bottom: 14px; box-shadow: var(--shadow); min-height: 88px;
+}
+.answer-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.answer-label { font-size: 10px; color: var(--text2); letter-spacing: 3px; text-transform: uppercase; font-weight: 500; }
+.answer-badge {
+  font-size: 11px; color: var(--accent); background: var(--accent-light);
+  border-radius: 20px; padding: 3px 10px; font-weight: 500;
+}
+.answer-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.answer-item {
+  background: var(--accent-light); border-radius: 10px; padding: 10px 14px;
+  font-family: 'DM Serif Display', serif; font-size: 15px; color: var(--accent);
+  animation: fadeIn .22s ease both; display: flex; align-items: center; gap: 10px;
+}
+.answer-item .idx { font-size: 10px; color: var(--text2); font-family: 'DM Sans',sans-serif; font-weight: 500; min-width: 18px; }
+@keyframes fadeIn { from{opacity:0;transform:translateX(-4px)} to{opacity:1;transform:translateX(0)} }
+.state-msg { color: var(--text2); font-size: 13px; line-height: 1.7; }
 
-  .ctrl-label {
-    font-size: 10px; color: var(--text2);
-    letter-spacing: 3px; text-transform: uppercase;
-    font-weight: 500; margin-bottom: 10px;
-  }
+/* Buttons */
+.btn-row { display: flex; gap: 8px; }
+.btn {
+  flex: 1; padding: 14px 16px; border-radius: 14px;
+  font-family: 'DM Sans',sans-serif; font-size: 14px; font-weight: 500;
+  border: none; cursor: pointer; transition: all .15s;
+}
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { filter: brightness(.88); box-shadow: 0 4px 14px rgba(0,0,0,.18); transform: translateY(-1px); }
+.btn-secondary { background: var(--surface); border: 1px solid var(--border); color: var(--text2); }
+.btn-secondary:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+.btn:disabled { opacity: .38; cursor: default; }
+.btn:active:not(:disabled) { transform: scale(.98)!important; }
 
-  /* Theme swatches */
-  .theme-swatches {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-  }
+/* Controls + Footer */
+.controls-bar { display: flex; gap: 10px; }
+.ctrl-panel {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 16px; padding: 12px 16px; box-shadow: var(--shadow); flex: 1;
+}
+.ctrl-label { font-size: 10px; color: var(--text2); letter-spacing: 3px; text-transform: uppercase; font-weight: 500; margin-bottom: 10px; }
+.theme-swatches { display: flex; gap: 8px; align-items: center; }
+.swatch {
+  width: 26px; height: 26px; border-radius: 50%; border: 2px solid transparent;
+  cursor: pointer; transition: transform .15s, border-color .15s; position: relative; flex-shrink: 0;
+}
+.swatch:hover { transform: scale(1.15); }
+.swatch.active { border-color: var(--text); }
+.swatch.active::after {
+  content: '✓'; position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; color: white; text-shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+.size-row { display: flex; align-items: center; gap: 8px; }
+.size-icon { font-size: 10px; color: var(--text2); user-select: none; }
+.size-icon.big { font-size: 14px; }
+input.size-range {
+  flex: 1; -webkit-appearance: none; appearance: none;
+  height: 4px; background: var(--border); border-radius: 4px; outline: none; cursor: pointer;
+}
+input.size-range::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%;
+  background: var(--accent); border: 2px solid var(--surface); box-shadow: 0 1px 4px rgba(0,0,0,.2); transition: transform .15s;
+}
+input.size-range::-webkit-slider-thumb:hover { transform: scale(1.2); }
+input.size-range::-moz-range-thumb {
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--accent); border: 2px solid var(--surface); cursor: pointer;
+}
+.footer {
+  text-align: center; margin-top: 20px; padding-top: 16px;
+  border-top: 1px solid var(--border); font-size: 11px; color: var(--text2);
+  letter-spacing: 2px; font-weight: 300; text-transform: uppercase;
+}
+.footer span { color: var(--accent); font-weight: 500; }
 
-  .swatch {
-    width: 26px; height: 26px;
-    border-radius: 50%;
-    border: 2px solid transparent;
-    cursor: pointer;
-    transition: transform 0.15s, border-color 0.15s;
-    position: relative;
-    flex-shrink: 0;
-  }
-  .swatch:hover { transform: scale(1.15); }
-  .swatch.active { border-color: var(--text); }
-  .swatch.active::after {
-    content: '✓';
-    position: absolute; inset: 0;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 12px; color: white;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.4);
-  }
+/* ══════════════════════════════════
+   PRESENTATION TOGGLE BUTTON
+   吸附在右侧中间偏下
+══════════════════════════════════ */
+#togglePresBtn {
+  position: fixed; right: 0; bottom: 30%;
+  z-index: 999;
+  background: var(--accent); color: #fff;
+  border: none; cursor: pointer;
+  width: 32px; height: 64px;
+  border-radius: 10px 0 0 10px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: -2px 0 12px rgba(0,0,0,.15);
+  transition: width .2s, background .3s;
+  font-size: 16px;
+}
+#togglePresBtn:hover { width: 40px; filter: brightness(.88); }
+#togglePresBtn .arrow { transition: transform .3s; display: block; }
 
-  /* Size slider */
-  .size-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .size-icon { font-size: 10px; color: var(--text2); user-select: none; }
-  .size-icon.big { font-size: 14px; }
+/* ══════════════════════════════════
+   PRESENTATION MODE
+══════════════════════════════════ */
+.pres-view {
+  display: none;
+  position: fixed; inset: 0;
+  background: var(--bg);
+  transition: background .3s;
+}
 
-  input.size-range {
-    flex: 1;
-    -webkit-appearance: none;
-    appearance: none;
-    height: 4px;
-    background: var(--border);
-    border-radius: 4px;
-    outline: none;
-    cursor: pointer;
-  }
-  input.size-range::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 16px; height: 16px;
-    border-radius: 50%;
-    background: var(--accent);
-    border: 2px solid var(--surface);
-    box-shadow: 0 1px 4px rgba(0,0,0,0.2);
-    transition: transform 0.15s;
-  }
-  input.size-range::-webkit-slider-thumb:hover { transform: scale(1.2); }
-  input.size-range::-moz-range-thumb {
-    width: 16px; height: 16px;
-    border-radius: 50%;
-    background: var(--accent);
-    border: 2px solid var(--surface);
-    cursor: pointer;
-  }
+/* Left panel: giant numbers */
+.pres-left {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  width: calc(100% - 320px);
+  display: flex;
+  align-items: center; justify-content: center;
+  padding: 24px 28px;
+}
 
-  /* Score bar */
-  .score-bar {
-    display: flex; gap: 1px;
-    background: var(--border); border-radius: 14px;
-    overflow: hidden; margin-bottom: 20px; box-shadow: var(--shadow);
-  }
-  .score-item {
-    flex: 1; background: var(--surface);
-    padding: 14px 10px; text-align: center;
-  }
-  .score-item:first-child { border-radius: 14px 0 0 14px; }
-  .score-item:last-child  { border-radius: 0 14px 14px 0; }
-  .score-val {
-    font-family: 'DM Serif Display', serif;
-    font-size: 26px; color: var(--accent); line-height: 1;
-  }
-  .score-lbl {
-    font-size: 10px; color: var(--text2);
-    letter-spacing: 2px; text-transform: uppercase; margin-top: 3px;
-  }
+.pres-title { display: none; }
+.pres-subtitle { display: none; }
 
-  /* Difficulty */
-  .difficulty-wrap {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 16px; padding: 16px 20px;
-    margin-bottom: 20px; box-shadow: var(--shadow);
-  }
-  .diff-header {
-    display: flex; align-items: center;
-    justify-content: space-between; margin-bottom: 12px;
-  }
-  .diff-label {
-    font-size: 10px; color: var(--text2);
-    letter-spacing: 3px; text-transform: uppercase; font-weight: 500;
-  }
-  .diff-name { font-size: 12px; font-weight: 500; letter-spacing: 1px; transition: color 0.3s; }
-  .diff-name.easy   { color: var(--easy); }
-  .diff-name.medium { color: var(--medium); }
-  .diff-name.hard   { color: var(--hard); }
-  .slider-track {
-    position: relative; height: 6px;
-    background: var(--border); border-radius: 6px; margin: 4px 0 14px;
-  }
-  .slider-fill {
-    position: absolute; left: 0; top: 0; bottom: 0;
-    border-radius: 6px; transition: width 0.25s ease, background 0.3s;
-  }
-  input[type=range].diff-range {
-    position: absolute; width: 100%; top: 50%;
-    transform: translateY(-50%);
-    -webkit-appearance: none; appearance: none;
-    background: transparent; cursor: pointer; margin: 0;
-  }
-  input[type=range].diff-range::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 20px; height: 20px; border-radius: 50%;
-    background: var(--surface); border: 2px solid currentColor;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.15); transition: transform 0.15s;
-  }
-  input[type=range].diff-range::-webkit-slider-thumb:hover { transform: scale(1.15); }
-  input[type=range].diff-range::-moz-range-thumb {
-    width: 20px; height: 20px; border-radius: 50%;
-    background: var(--surface); border: 2px solid currentColor; cursor: pointer;
-  }
-  .diff-ticks { display: flex; justify-content: space-between; padding: 0 2px; }
-  .diff-tick { font-size: 10px; color: var(--text2); letter-spacing: 0.5px; }
+.pres-nums {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  width: 100%;
+  height: calc(100vh - 48px);
+  align-items: stretch;
+}
+.pres-num-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 24px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: min(calc((100vw - 320px - 56px - 48px) / 4 * 0.82), calc((100vh - 48px) * 0.82));
+  color: var(--text); box-shadow: var(--shadow-card);
+  animation: slideIn .4s cubic-bezier(.22,1,.36,1) both;
+  position: relative;
+  min-width: 0; min-height: 0;
+}
+.pres-num-card::after {
+  content: ''; position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%);
+  width: min(4vw, 40px); height: 3px; border-radius: 2px; opacity: .3; background: var(--accent);
+}
+.pres-num-card:nth-child(1){animation-delay:.00s}
+.pres-num-card:nth-child(2){animation-delay:.07s}
+.pres-num-card:nth-child(3){animation-delay:.14s}
+.pres-num-card:nth-child(4){animation-delay:.21s}
 
-  /* Number cards */
-  .numbers-grid {
-    display: grid; grid-template-columns: repeat(4, 1fr);
-    gap: 10px; margin-bottom: 24px;
-  }
-  .num-card {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 16px; aspect-ratio: 1;
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'DM Serif Display', serif;
-    font-size: clamp(32px, 7vw, 44px); color: var(--text);
-    box-shadow: var(--shadow-card);
-    animation: slideIn 0.4s cubic-bezier(0.22,1,0.36,1) both;
-    position: relative;
-  }
-  .num-card::after {
-    content: ''; position: absolute;
-    bottom: 9px; left: 50%; transform: translateX(-50%);
-    width: 18px; height: 2px; border-radius: 2px;
-    opacity: 0.35; background: var(--accent);
-  }
-  .num-card:nth-child(1) { animation-delay: 0.00s; }
-  .num-card:nth-child(2) { animation-delay: 0.06s; }
-  .num-card:nth-child(3) { animation-delay: 0.12s; }
-  .num-card:nth-child(4) { animation-delay: 0.18s; }
-  @keyframes slideIn {
-    from { opacity: 0; transform: translateY(14px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+/* Right panel: controls */
+.pres-right {
+  position: absolute; right: 0; top: 0; bottom: 0; width: 320px;
+  background: var(--surface); border-left: 1px solid var(--border);
+  box-shadow: -4px 0 20px rgba(44,40,36,.07);
+  display: flex; flex-direction: column;
+  padding: 28px 22px; gap: 16px;
+  overflow-y: auto;
+}
 
-  /* Answers */
-  .answer-section {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 20px; padding: 22px;
-    margin-bottom: 14px; box-shadow: var(--shadow); min-height: 88px;
-  }
-  .answer-header {
-    display: flex; align-items: center;
-    justify-content: space-between; margin-bottom: 14px;
-  }
-  .answer-label {
-    font-size: 10px; color: var(--text2);
-    letter-spacing: 3px; text-transform: uppercase; font-weight: 500;
-  }
-  .answer-badge {
-    font-size: 11px; color: var(--accent);
-    background: var(--accent-light);
-    border-radius: 20px; padding: 3px 10px; font-weight: 500;
-  }
-  .answer-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
-  .answer-item {
-    background: var(--accent-light); border-radius: 10px;
-    padding: 10px 14px; font-family: 'DM Serif Display', serif;
-    font-size: 15px; color: var(--accent);
-    animation: fadeIn 0.22s ease both;
-    display: flex; align-items: center; gap: 10px;
-  }
-  .answer-item .idx {
-    font-size: 10px; color: var(--text2);
-    font-family: 'DM Sans', sans-serif; font-weight: 500; min-width: 18px;
-  }
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateX(-4px); }
-    to   { opacity: 1; transform: translateX(0); }
-  }
-  .state-msg { color: var(--text2); font-size: 13px; line-height: 1.7; }
+.pres-score {
+  display: flex; gap: 1px; background: var(--border);
+  border-radius: 12px; overflow: hidden; flex-shrink: 0;
+}
+.pres-score-item { flex: 1; background: var(--surface); padding: 10px 6px; text-align: center; }
+.pres-score-item:first-child { border-radius: 12px 0 0 12px; }
+.pres-score-item:last-child  { border-radius: 0 12px 12px 0; }
 
-  /* Footer */
-  .footer {
-    text-align: center;
-    margin-top: 20px;
-    padding-top: 16px;
-    border-top: 1px solid var(--border);
-    font-size: 11px;
-    color: var(--text2);
-    letter-spacing: 2px;
-    font-weight: 300;
-    text-transform: uppercase;
-  }
-  .footer span { color: var(--accent); font-weight: 500; }
+.pres-answer-section {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 14px; padding: 16px; flex: 1; overflow-y: auto; min-height: 0;
+}
 
-  /* Buttons */
-  .btn-row { display: flex; gap: 8px; }
-  .btn {
-    flex: 1; padding: 14px 16px; border-radius: 14px;
-    font-family: 'DM Sans', sans-serif; font-size: 14px;
-    font-weight: 500; letter-spacing: 0.2px;
-    border: none; cursor: pointer; transition: all 0.15s ease;
-  }
-  .btn-primary { background: var(--accent); color: #fff; }
-  .btn-primary:hover {
-    filter: brightness(0.88);
-    box-shadow: 0 4px 14px rgba(0,0,0,0.18);
-    transform: translateY(-1px);
-  }
-  .btn-secondary {
-    background: var(--surface); border: 1px solid var(--border); color: var(--text2);
-  }
-  .btn-secondary:hover:not(:disabled) {
-    border-color: var(--accent); color: var(--accent); transform: translateY(-1px);
-  }
-  .btn:disabled { opacity: 0.38; cursor: default; }
-  .btn:active:not(:disabled) { transform: scale(0.98) !important; }
+.pres-btn-row { display: flex; gap: 8px; flex-shrink: 0; }
+
+.pres-diff-wrap {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 14px; padding: 14px 16px; flex-shrink: 0;
+}
+
+.pres-ctrl-wrap {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 14px; padding: 12px 14px; flex-shrink: 0;
+}
+
+.pres-footer {
+  text-align: center; font-size: 10px; color: var(--text2);
+  letter-spacing: 2px; text-transform: uppercase; flex-shrink: 0; padding-top: 4px;
+}
+.pres-footer span { color: var(--accent); font-weight: 500; }
+
+/* Active state */
+body.pres-mode .normal-view { display: none; }
+body.pres-mode .pres-view   { display: block; }
+body.pres-mode #togglePresBtn .arrow { transform: rotate(180deg); }
 </style>
 </head>
 <body>
+
+<!-- ▶ Toggle button (always visible) -->
+<button id="togglePresBtn" onclick="togglePres()" title="展示模式">
+  <span class="arrow">&#8250;</span>
+</button>
+
+<!-- ══════════════ NORMAL VIEW ══════════════ -->
+<div class="normal-view">
 <div class="scale-wrap" id="scaleWrap">
 <div class="container">
 
@@ -327,333 +321,390 @@
     <div class="subtitle">武汉外校数学文化节</div>
   </header>
 
-  <!-- 分数 -->
   <div class="score-bar">
-    <div class="score-item"><div class="score-val" id="rounds">0</div><div class="score-lbl">局数</div></div>
-    <div class="score-item"><div class="score-val" id="solved">0</div><div class="score-lbl">已解</div></div>
-    <div class="score-item"><div class="score-val" id="hints">0</div><div class="score-lbl">提示</div></div>
+    <div class="score-item"><div class="score-val" id="n-rounds">0</div><div class="score-lbl">局数</div></div>
+    <div class="score-item"><div class="score-val" id="n-solved">0</div><div class="score-lbl">已解</div></div>
+    <div class="score-item"><div class="score-val" id="n-hints">0</div><div class="score-lbl">提示</div></div>
   </div>
 
-  <!-- 难度 -->
   <div class="difficulty-wrap">
     <div class="diff-header">
       <div class="diff-label">难度</div>
-      <div class="diff-name easy" id="diffName">简单</div>
+      <div class="diff-name easy" id="n-diffName">简单</div>
     </div>
     <div class="slider-track">
-      <div class="slider-fill" id="sliderFill" style="width:0%;background:var(--easy)"></div>
-      <input type="range" class="diff-range" id="diffSlider" min="0" max="2" step="1" value="0"
+      <div class="slider-fill" id="n-sliderFill" style="width:0%;background:var(--easy)"></div>
+      <input type="range" class="diff-range" id="n-diffSlider" min="0" max="2" step="1" value="0"
              style="color:var(--easy)" oninput="onDiffChange(this.value)">
     </div>
     <div class="diff-ticks">
-      <span class="diff-tick">简单</span>
-      <span class="diff-tick">中等</span>
-      <span class="diff-tick">困难</span>
+      <span class="diff-tick">简单</span><span class="diff-tick">中等</span><span class="diff-tick">困难</span>
     </div>
   </div>
 
-  <!-- 数字卡片 -->
-  <div class="numbers-grid" id="numGrid">
+  <div class="numbers-grid" id="n-numGrid">
     <div class="num-card">—</div><div class="num-card">—</div>
     <div class="num-card">—</div><div class="num-card">—</div>
   </div>
 
-  <!-- 解法 -->
   <div class="answer-section">
     <div class="answer-header">
       <div class="answer-label">解法</div>
-      <div class="answer-badge" id="answerBadge" style="display:none"></div>
+      <div class="answer-badge" id="n-answerBadge" style="display:none"></div>
     </div>
-    <div id="answerContent"><div class="state-msg">点击「新题目」开始游戏</div></div>
+    <div id="n-answerContent"><div class="state-msg">点击「新题目」开始游戏</div></div>
   </div>
 
-  <!-- 按钮 -->
-  <div class="btn-row">
+  <div class="btn-row" style="margin-bottom:20px">
     <button class="btn btn-primary" onclick="newGame()">新题目</button>
-    <button class="btn btn-secondary" id="hintBtn" onclick="showAnswers()" disabled>查看解法</button>
+    <button class="btn btn-secondary" id="n-hintBtn" onclick="showAnswers()" disabled>查看解法</button>
   </div>
 
-  <!-- 主题色 + 界面大小（底部） -->
-  <div class="controls-bar" style="margin-top:20px;margin-bottom:0">
+  <div class="controls-bar" style="margin-bottom:0">
     <div class="ctrl-panel">
       <div class="ctrl-label">主题色</div>
       <div class="theme-swatches" id="swatches">
-        <div class="swatch active" data-theme="green"  style="background:#3d6b5e" title="森林绿"></div>
-        <div class="swatch"        data-theme="blue"   style="background:#2d5fa0" title="深海蓝"></div>
-        <div class="swatch"        data-theme="red"    style="background:#9b3535" title="暗红"></div>
-        <div class="swatch"        data-theme="black"  style="background:#222222" title="炭黑"></div>
+        <div class="swatch active" data-theme="green" style="background:#3d6b5e" title="森林绿"></div>
+        <div class="swatch" data-theme="blue"  style="background:#2d5fa0" title="深海蓝"></div>
+        <div class="swatch" data-theme="red"   style="background:#9b3535" title="暗红"></div>
+        <div class="swatch" data-theme="black" style="background:#222222" title="炭黑"></div>
       </div>
     </div>
     <div class="ctrl-panel">
       <div class="ctrl-label">界面大小</div>
       <div class="size-row">
         <span class="size-icon">A</span>
-        <input class="size-range" type="range" id="sizeSlider"
-               min="0.7" max="2.0" step="0.05" value="1.0"
-               oninput="onSizeChange(this.value)">
+        <input class="size-range" type="range" id="sizeSlider" min="0.7" max="2.0" step="0.05" value="1.0" oninput="onSizeChange(this.value)">
         <span class="size-icon big">A</span>
       </div>
     </div>
   </div>
 
-  <!-- 页脚 -->
-  <footer class="footer">
-    Made with ♥ by <span>zym</span> &amp; <span>Claude</span>
-  </footer>
+  <div class="footer">Made with ♥ by <span>zym</span> &amp; <span>Claude</span></div>
 
-</div><!-- .container -->
-</div><!-- .scale-wrap -->
+</div>
+</div>
+</div>
+
+<!-- ══════════════ PRESENTATION VIEW ══════════════ -->
+<div class="pres-view">
+
+  <!-- Left: giant numbers -->
+  <div class="pres-left">
+    <div class="pres-title">Math <span>24</span></div>
+    <div class="pres-subtitle">武汉外校数学文化节</div>
+    <div class="pres-nums" id="p-numGrid">
+      <div class="pres-num-card">—</div><div class="pres-num-card">—</div>
+      <div class="pres-num-card">—</div><div class="pres-num-card">—</div>
+    </div>
+  </div>
+
+  <!-- Right: all controls -->
+  <div class="pres-right">
+
+    <!-- Score -->
+    <div class="pres-score">
+      <div class="pres-score-item"><div class="score-val" id="p-rounds">0</div><div class="score-lbl">局数</div></div>
+      <div class="pres-score-item"><div class="score-val" id="p-solved">0</div><div class="score-lbl">已解</div></div>
+      <div class="pres-score-item"><div class="score-val" id="p-hints">0</div><div class="score-lbl">提示</div></div>
+    </div>
+
+    <!-- Difficulty -->
+    <div class="pres-diff-wrap">
+      <div class="diff-header">
+        <div class="diff-label">难度</div>
+        <div class="diff-name easy" id="p-diffName">简单</div>
+      </div>
+      <div class="slider-track">
+        <div class="slider-fill" id="p-sliderFill" style="width:0%;background:var(--easy)"></div>
+        <input type="range" class="diff-range" id="p-diffSlider" min="0" max="2" step="1" value="0"
+               style="color:var(--easy)" oninput="onDiffChange(this.value)">
+      </div>
+      <div class="diff-ticks">
+        <span class="diff-tick">简单</span><span class="diff-tick">中等</span><span class="diff-tick">困难</span>
+      </div>
+    </div>
+
+    <!-- Answers -->
+    <div class="pres-answer-section">
+      <div class="answer-header">
+        <div class="answer-label">解法</div>
+        <div class="answer-badge" id="p-answerBadge" style="display:none"></div>
+      </div>
+      <div id="p-answerContent"><div class="state-msg">点击「新题目」开始</div></div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="pres-btn-row">
+      <button class="btn btn-primary" onclick="newGame()">新题目</button>
+      <button class="btn btn-secondary" id="p-hintBtn" onclick="showAnswers()" disabled>查看解法</button>
+    </div>
+
+    <!-- Theme + Size -->
+    <div class="pres-ctrl-wrap">
+      <div class="ctrl-label" style="margin-bottom:10px">主题色</div>
+      <div class="theme-swatches" id="p-swatches" style="margin-bottom:14px">
+        <div class="swatch active" data-theme="green" style="background:#3d6b5e"></div>
+        <div class="swatch" data-theme="blue"  style="background:#2d5fa0"></div>
+        <div class="swatch" data-theme="red"   style="background:#9b3535"></div>
+        <div class="swatch" data-theme="black" style="background:#222222"></div>
+      </div>
+      <div class="ctrl-label" style="margin-bottom:8px">界面大小</div>
+      <div class="size-row">
+        <span class="size-icon">A</span>
+        <input class="size-range" type="range" id="p-sizeSlider" min="0.7" max="2.0" step="0.05" value="1.0" oninput="onSizeChange(this.value)">
+        <span class="size-icon big">A</span>
+      </div>
+    </div>
+
+    <div class="pres-footer">Made with ♥ by <span>zym</span> &amp; <span>Claude</span></div>
+
+  </div>
+</div>
 
 <script>
-// ═══════════════════════════════════════════════════════
-// 主题色配置
-// ═══════════════════════════════════════════════════════
+// ══════════════════════════════════
+// 展示模式切换
+// ══════════════════════════════════
+let presMode = false;
+function togglePres() {
+  presMode = !presMode;
+  document.body.classList.toggle('pres-mode', presMode);
+  // 同步数字到展示视图
+  if (presMode) syncPresNums();
+}
+
+// ══════════════════════════════════
+// 主题色
+// ══════════════════════════════════
 const THEMES = {
-  green: {
-    '--accent':       '#3d6b5e',
-    '--accent-light': '#e8f0ee',
-    '--bg':           '#f4f1ec',
-    '--surface':      '#ffffff',
-    '--border':       '#ddd9d1',
-    '--text':         '#2c2824',
-    '--text2':        '#8a837a',
-  },
-  blue: {
-    '--accent':       '#2d5fa0',
-    '--accent-light': '#e3ecf8',
-    '--bg':           '#f0f3f8',
-    '--surface':      '#ffffff',
-    '--border':       '#ccd6e8',
-    '--text':         '#1a2638',
-    '--text2':        '#6a7a90',
-  },
-  red: {
-    '--accent':       '#9b3535',
-    '--accent-light': '#f8e8e8',
-    '--bg':           '#f8f2f2',
-    '--surface':      '#ffffff',
-    '--border':       '#e8d0d0',
-    '--text':         '#2e1a1a',
-    '--text2':        '#906060',
-  },
-  black: {
-    '--accent':       '#444444',
-    '--accent-light': '#ebebeb',
-    '--bg':           '#f2f2f2',
-    '--surface':      '#ffffff',
-    '--border':       '#d8d8d8',
-    '--text':         '#111111',
-    '--text2':        '#777777',
-  },
+  green: { '--accent':'#3d6b5e','--accent-light':'#e8f0ee','--bg':'#f4f1ec','--surface':'#fff','--border':'#ddd9d1','--text':'#2c2824','--text2':'#8a837a' },
+  blue:  { '--accent':'#2d5fa0','--accent-light':'#e3ecf8','--bg':'#f0f3f8','--surface':'#fff','--border':'#ccd6e8','--text':'#1a2638','--text2':'#6a7a90' },
+  red:   { '--accent':'#9b3535','--accent-light':'#f8e8e8','--bg':'#f8f2f2','--surface':'#fff','--border':'#e8d0d0','--text':'#2e1a1a','--text2':'#906060' },
+  black: { '--accent':'#444444','--accent-light':'#ebebeb','--bg':'#f2f2f2','--surface':'#fff','--border':'#d8d8d8','--text':'#111111','--text2':'#777777' },
 };
 
 function applyTheme(name) {
-  const vars = THEMES[name];
-  const root = document.documentElement;
-  for (const [k, v] of Object.entries(vars)) root.style.setProperty(k, v);
-
-  // update swatch active state
-  document.querySelectorAll('.swatch').forEach(el => {
-    el.classList.toggle('active', el.dataset.theme === name);
-  });
-
-  // re-sync difficulty slider color
-  onDiffChange(document.getElementById('diffSlider').value);
-  // re-sync size slider thumb color (uses --accent via CSS)
+  for (const [k,v] of Object.entries(THEMES[name])) document.documentElement.style.setProperty(k,v);
+  document.querySelectorAll('.swatch').forEach(el => el.classList.toggle('active', el.dataset.theme === name));
+  onDiffChange(currentDiff);
 }
 
-document.getElementById('swatches').addEventListener('click', e => {
-  const sw = e.target.closest('.swatch');
-  if (sw) applyTheme(sw.dataset.theme);
-});
+document.getElementById('swatches').addEventListener('click', e => { const s=e.target.closest('.swatch'); if(s) applyTheme(s.dataset.theme); });
+document.getElementById('p-swatches').addEventListener('click', e => { const s=e.target.closest('.swatch'); if(s) applyTheme(s.dataset.theme); });
 
-// ═══════════════════════════════════════════════════════
-// 界面大小
-// ═══════════════════════════════════════════════════════
+// ══════════════════════════════════
+// 界面大小（仅普通模式有效）
+// ══════════════════════════════════
 function onSizeChange(val) {
+  // sync both sliders
+  document.getElementById('sizeSlider').value = val;
+  document.getElementById('p-sizeSlider').value = val;
   document.documentElement.style.setProperty('--scale', val);
-  // 调整 body 高度，避免缩放后出现滚动条
-  const wrap = document.getElementById('scaleWrap');
-  wrap.style.minHeight = (100 / val) + 'vh';
+  document.getElementById('scaleWrap').style.minHeight = (100/val) + 'vh';
 }
 
-// ═══════════════════════════════════════════════════════
-// 求解器（树 + 规范化签名去重）
-// ═══════════════════════════════════════════════════════
-function numNode(val, idx)            { return { type:'num', val, idx }; }
-function opNode(op, left, right, val) { return { type:'op', op, left, right, val }; }
+// ══════════════════════════════════
+// 求解器
+// ══════════════════════════════════
+function numNode(val,idx)           { return {type:'num',val,idx}; }
+function opNode(op,left,right,val)  { return {type:'op',op,left,right,val}; }
 
-function treeToStr(node, parentOp, side) {
-  if (node.type === 'num') return String(node.val);
-  const { op, left, right } = node;
-  const ls = treeToStr(left, op, 'left');
-  const rs = treeToStr(right, op, 'right');
-  let wrap = false;
-  if (parentOp === '-' && side === 'right' && (op === '+' || op === '-')) wrap = true;
-  if (parentOp === '÷' && side === 'right' && (op === '+' || op === '-' || op === '×' || op === '÷')) wrap = true;
-  if ((parentOp === '×' || parentOp === '÷') && (op === '+' || op === '-')) wrap = true;
+function treeToStr(node,parentOp,side) {
+  if (node.type==='num') return String(node.val);
+  const {op,left,right}=node;
+  const ls=treeToStr(left,op,'left'), rs=treeToStr(right,op,'right');
+  let wrap=false;
+  if (parentOp==='-'&&side==='right'&&(op==='+'||op==='-')) wrap=true;
+  if (parentOp==='÷'&&side==='right'&&(op==='+'||op==='-'||op==='×'||op==='÷')) wrap=true;
+  if ((parentOp==='×'||parentOp==='÷')&&(op==='+'||op==='-')) wrap=true;
   return wrap ? `(${ls}${op}${rs})` : `${ls}${op}${rs}`;
 }
 
 function treeSignature(node) {
-  if (node.type === 'num') return `#${node.idx}`;
-  const { op } = node;
-  if (op === '+' || op === '-') {
-    const terms = [];
-    function flatAS(n, sign) {
-      if (n.type === 'num') { terms.push(sign + '#' + n.idx); return; }
-      if (n.op === '+') { flatAS(n.left, sign); flatAS(n.right, sign); }
-      else if (n.op === '-') { flatAS(n.left, sign); flatAS(n.right, sign === '+' ? '-' : '+'); }
-      else terms.push(sign + '(' + treeSignature(n) + ')');
+  if (node.type==='num') return `#${node.idx}`;
+  const {op}=node;
+  if (op==='+'||op==='-') {
+    const terms=[];
+    function flatAS(n,sign) {
+      if (n.type==='num'){terms.push(sign+'#'+n.idx);return;}
+      if (n.op==='+'){flatAS(n.left,sign);flatAS(n.right,sign);}
+      else if (n.op==='-'){flatAS(n.left,sign);flatAS(n.right,sign==='+'?'-':'+');}
+      else terms.push(sign+'('+treeSignature(n)+')');
     }
-    flatAS(node, '+');
-    terms.sort((a, b) => { if (a[0] !== b[0]) return a[0] === '+' ? -1 : 1; return a < b ? -1 : 1; });
-    return 'S[' + terms.join(',') + ']';
+    flatAS(node,'+');
+    terms.sort((a,b)=>{ if(a[0]!==b[0]) return a[0]==='+'?-1:1; return a<b?-1:1; });
+    return 'S['+terms.join(',')+']';
   }
-  if (op === '×') {
-    const factors = [];
+  if (op==='×') {
+    const factors=[];
     function flatMul(n) {
-      if (n.type === 'num') { factors.push('#' + n.idx); return; }
-      if (n.op === '×') { flatMul(n.left); flatMul(n.right); }
-      else factors.push('(' + treeSignature(n) + ')');
+      if (n.type==='num'){factors.push('#'+n.idx);return;}
+      if (n.op==='×'){flatMul(n.left);flatMul(n.right);}
+      else factors.push('('+treeSignature(n)+')');
     }
     flatMul(node); factors.sort();
-    return 'P[' + factors.join(',') + ']';
+    return 'P['+factors.join(',')+']';
   }
   return `(${treeSignature(node.left)}${op}${treeSignature(node.right)})`;
 }
 
-function makeLeaf(val, idx) { return { val, tree: numNode(val, idx), indices: [idx] }; }
+function makeLeaf(val,idx) { return {val,tree:numNode(val,idx),indices:[idx]}; }
 
-function combineExprs(a, b) {
-  const aMax = Math.max(...a.indices), bMin = Math.min(...b.indices);
-  const bMax = Math.max(...b.indices), aMin = Math.min(...a.indices);
-  const out = [];
-  function push(lv, rv, op, lt, rt, ni) {
-    const val = op==='+' ? lv+rv : op==='-' ? lv-rv : op==='×' ? lv*rv : lv/rv;
-    out.push({ val, tree: opNode(op, lt, rt, val), indices: ni });
+function combineExprs(a,b) {
+  const aMax=Math.max(...a.indices),bMin=Math.min(...b.indices);
+  const bMax=Math.max(...b.indices),aMin=Math.min(...a.indices);
+  const out=[];
+  function push(lv,rv,op,lt,rt,ni) {
+    const val=op==='+'?lv+rv:op==='-'?lv-rv:op==='×'?lv*rv:lv/rv;
+    out.push({val,tree:opNode(op,lt,rt,val),indices:ni});
   }
-  if (aMax < bMin) {
-    const ni = [...a.indices, ...b.indices];
-    push(a.val, b.val, '+', a.tree, b.tree, ni);
-    push(a.val, b.val, '-', a.tree, b.tree, ni);
-    push(a.val, b.val, '×', a.tree, b.tree, ni);
-    if (b.val !== 0) push(a.val, b.val, '÷', a.tree, b.tree, ni);
-  } else if (bMax < aMin) {
-    const ni = [...b.indices, ...a.indices];
-    push(b.val, a.val, '+', b.tree, a.tree, ni);
-    push(b.val, a.val, '-', b.tree, a.tree, ni);
-    push(b.val, a.val, '×', b.tree, a.tree, ni);
-    if (a.val !== 0) push(b.val, a.val, '÷', b.tree, a.tree, ni);
+  if (aMax<bMin) {
+    const ni=[...a.indices,...b.indices];
+    push(a.val,b.val,'+',a.tree,b.tree,ni); push(a.val,b.val,'-',a.tree,b.tree,ni);
+    push(a.val,b.val,'×',a.tree,b.tree,ni); if(b.val!==0) push(a.val,b.val,'÷',a.tree,b.tree,ni);
+  } else if (bMax<aMin) {
+    const ni=[...b.indices,...a.indices];
+    push(b.val,a.val,'+',b.tree,a.tree,ni); push(b.val,a.val,'-',b.tree,a.tree,ni);
+    push(b.val,a.val,'×',b.tree,a.tree,ni); if(a.val!==0) push(b.val,a.val,'÷',b.tree,a.tree,ni);
   }
   return out;
 }
 
 function solve24(inputNums) {
-  const sigSet = new Set(), results = [];
+  const sigSet=new Set(), results=[];
   function search(exprs) {
-    if (exprs.length === 1) {
-      if (Math.abs(exprs[0].val - 24) < 1e-9) {
-        const sig = treeSignature(exprs[0].tree);
-        if (!sigSet.has(sig)) { sigSet.add(sig); results.push(treeToStr(exprs[0].tree, null, null)); }
+    if (exprs.length===1) {
+      if (Math.abs(exprs[0].val-24)<1e-9) {
+        const sig=treeSignature(exprs[0].tree);
+        if (!sigSet.has(sig)){sigSet.add(sig);results.push(treeToStr(exprs[0].tree,null,null));}
       }
       return;
     }
-    for (let i = 0; i < exprs.length; i++)
-      for (let j = i + 1; j < exprs.length; j++) {
-        const rest = exprs.filter((_, k) => k !== i && k !== j);
-        for (const m of combineExprs(exprs[i], exprs[j])) search([...rest, m]);
+    for (let i=0;i<exprs.length;i++)
+      for (let j=i+1;j<exprs.length;j++) {
+        const rest=exprs.filter((_,k)=>k!==i&&k!==j);
+        for (const m of combineExprs(exprs[i],exprs[j])) search([...rest,m]);
       }
   }
-  search(inputNums.map((v, i) => makeLeaf(v, i)));
+  search(inputNums.map((v,i)=>makeLeaf(v,i)));
   return results.sort();
 }
 
-// ── 难度 ──────────────────────────────────────────────
+// ══════════════════════════════════
+// 难度
+// ══════════════════════════════════
 function solutionComplexity(s) {
-  if (!s.includes('×') && !s.includes('÷')) return 0;
-  let maxD = 0, d = 0;
-  for (const c of s) { if (c==='(') { d++; maxD=Math.max(maxD,d); } else if (c===')') d--; }
-  return maxD <= 1 ? 1 : 2;
+  if (!s.includes('×')&&!s.includes('÷')) return 0;
+  let maxD=0,d=0;
+  for (const c of s){if(c==='('){d++;maxD=Math.max(maxD,d);}else if(c===')') d--;}
+  return maxD<=1?1:2;
 }
 function puzzleDifficulty(sols) { return Math.min(...sols.map(solutionComplexity)); }
 
 function generatePuzzle(targetDiff) {
-  let nums, solutions, tries = 0;
+  let nums,solutions,tries=0;
   do {
-    nums = Array.from({length:4}, () => Math.floor(Math.random()*13)+1);
-    solutions = solve24(nums); tries++;
-  } while ((solutions.length===0 || puzzleDifficulty(solutions)!==targetDiff) && tries<600);
-  if (tries >= 600) {
-    tries = 0;
+    nums=Array.from({length:4},()=>Math.floor(Math.random()*13)+1);
+    solutions=solve24(nums); tries++;
+  } while((solutions.length===0||puzzleDifficulty(solutions)!==targetDiff)&&tries<600);
+  if (tries>=600) {
+    tries=0;
     do {
-      nums = Array.from({length:4}, () => Math.floor(Math.random()*13)+1);
-      solutions = solve24(nums); tries++;
-    } while ((solutions.length===0 || puzzleDifficulty(solutions)<targetDiff) && tries<600);
+      nums=Array.from({length:4},()=>Math.floor(Math.random()*13)+1);
+      solutions=solve24(nums); tries++;
+    } while((solutions.length===0||puzzleDifficulty(solutions)<targetDiff)&&tries<600);
   }
-  return { nums, solutions };
+  return {nums,solutions};
 }
 
-const DIFF_CONFIG = [
-  { name:'简单', cls:'easy',   color:'var(--easy)',   fill:'0%'  },
-  { name:'中等', cls:'medium', color:'var(--medium)', fill:'50%' },
-  { name:'困难', cls:'hard',   color:'var(--hard)',   fill:'100%'},
+const DIFF_CONFIG=[
+  {name:'简单',cls:'easy',  color:'var(--easy)',  fill:'0%'  },
+  {name:'中等',cls:'medium',color:'var(--medium)',fill:'50%' },
+  {name:'困难',cls:'hard',  color:'var(--hard)',  fill:'100%'},
 ];
-const DIFF_LABELS = ['只需加减', '需要乘除', '需要嵌套括号'];
-let currentDiff = 0;
+const DIFF_LABELS=['只需加减','需要乘除','需要嵌套括号'];
+let currentDiff=0;
 
 function onDiffChange(val) {
-  currentDiff = parseInt(val);
-  const cfg = DIFF_CONFIG[currentDiff];
-  const nameEl = document.getElementById('diffName');
-  nameEl.textContent = cfg.name;
-  nameEl.className = 'diff-name ' + cfg.cls;
-  document.getElementById('sliderFill').style.width = cfg.fill;
-  document.getElementById('sliderFill').style.background = cfg.color;
-  document.getElementById('diffSlider').style.color = cfg.color;
+  currentDiff=parseInt(val);
+  const cfg=DIFF_CONFIG[currentDiff];
+  // sync both views
+  ['n','p'].forEach(pfx => {
+    const nameEl=document.getElementById(pfx+'-diffName');
+    if(nameEl){nameEl.textContent=cfg.name; nameEl.className='diff-name '+cfg.cls;}
+    const fill=document.getElementById(pfx+'-sliderFill');
+    if(fill){fill.style.width=cfg.fill; fill.style.background=cfg.color;}
+    const slider=document.getElementById(pfx+'-diffSlider');
+    if(slider){slider.style.color=cfg.color; slider.value=currentDiff;}
+  });
 }
 
-// ── 游戏 ──────────────────────────────────────────────
-const state = { nums:[], solutions:[], rounds:0, solved:0, hints:0 };
+// ══════════════════════════════════
+// 游戏状态
+// ══════════════════════════════════
+const state={nums:[],solutions:[],rounds:0,solved:0,hints:0};
 
 function updateScore() {
-  document.getElementById('rounds').textContent = state.rounds;
-  document.getElementById('solved').textContent = state.solved;
-  document.getElementById('hints').textContent  = state.hints;
+  ['n','p'].forEach(pfx => {
+    const r=document.getElementById(pfx+'-rounds');
+    const s=document.getElementById(pfx+'-solved');
+    const h=document.getElementById(pfx+'-hints');
+    if(r) r.textContent=state.rounds;
+    if(s) s.textContent=state.solved;
+    if(h) h.textContent=state.hints;
+  });
 }
 
 function renderNumbers(nums) {
-  const grid = document.getElementById('numGrid');
-  grid.innerHTML = nums.map(n => `<div class="num-card">${n}</div>`).join('');
-  grid.querySelectorAll('.num-card').forEach((el,i) => el.style.animationDelay = `${i*0.06}s`);
+  // normal grid
+  const ng=document.getElementById('n-numGrid');
+  ng.innerHTML=nums.map(n=>`<div class="num-card">${n}</div>`).join('');
+  ng.querySelectorAll('.num-card').forEach((el,i)=>el.style.animationDelay=`${i*.06}s`);
+  // pres grid
+  syncPresNums();
+}
+
+function syncPresNums() {
+  const pg=document.getElementById('p-numGrid');
+  pg.innerHTML=state.nums.map(n=>`<div class="pres-num-card">${n}</div>`).join('');
+  pg.querySelectorAll('.pres-num-card').forEach((el,i)=>el.style.animationDelay=`${i*.07}s`);
+}
+
+function renderAnswerContent(html, badgeText, showBadge) {
+  ['n','p'].forEach(pfx => {
+    const content=document.getElementById(pfx+'-answerContent');
+    const badge=document.getElementById(pfx+'-answerBadge');
+    const btn=document.getElementById(pfx+'-hintBtn');
+    if(content) content.innerHTML=html;
+    if(badge){ badge.textContent=badgeText||''; badge.style.display=showBadge?'':'none'; }
+    if(btn&&showBadge){ btn.disabled=true; btn.textContent='已显示'; }
+    else if(btn){ btn.disabled=false; btn.textContent='查看解法'; }
+  });
 }
 
 function newGame() {
-  const { nums, solutions } = generatePuzzle(currentDiff);
-  state.nums = nums; state.solutions = solutions; state.rounds++;
-  updateScore(); renderNumbers(nums);
-  document.getElementById('answerBadge').style.display = 'none';
-  document.getElementById('answerContent').innerHTML =
+  const {nums,solutions}=generatePuzzle(currentDiff);
+  state.nums=nums; state.solutions=solutions; state.rounds++;
+  updateScore();
+  renderNumbers(nums);
+  renderAnswerContent(
     `<div class="state-msg">共有 <strong style="color:var(--accent)">${solutions.length}</strong> 种解法
-     <span style="color:var(--text2);font-size:11px;margin-left:6px">· ${DIFF_LABELS[currentDiff]}</span></div>`;
-  document.getElementById('hintBtn').disabled = false;
-  document.getElementById('hintBtn').textContent = '查看解法';
+     <span style="color:var(--text2);font-size:11px;margin-left:6px">· ${DIFF_LABELS[currentDiff]}</span></div>`,
+    '', false
+  );
 }
 
 function showAnswers() {
   state.hints++; state.solved++; updateScore();
-  const list = state.solutions;
-  document.getElementById('answerBadge').textContent = `${list.length} 种`;
-  document.getElementById('answerBadge').style.display = '';
-  document.getElementById('answerContent').innerHTML =
-    `<ul class="answer-list">${list.map((s,i) =>
-      `<li class="answer-item" style="animation-delay:${i*0.035}s">
-        <span class="idx">${i+1}</span>${s} = 24</li>`).join('')}</ul>`;
-  document.getElementById('hintBtn').disabled = true;
-  document.getElementById('hintBtn').textContent = '已显示';
+  const list=state.solutions;
+  const html=`<ul class="answer-list">${list.map((s,i)=>
+    `<li class="answer-item" style="animation-delay:${i*.035}s">
+      <span class="idx">${i+1}</span>${s} = 24</li>`).join('')}</ul>`;
+  renderAnswerContent(html, `${list.length} 种`, true);
 }
 
-window.onload = () => newGame();
+window.onload=()=>newGame();
 </script>
 </body>
 </html>
