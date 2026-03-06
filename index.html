@@ -1,347 +1,454 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>人人报社 - 记录真实，传递价值</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Times New Roman', '宋体', serif;
-        }
-        
-        body {
-            background-color: #f8f5e9;
-            color: #333;
-            line-height: 1.6;
-        }
-        
-        /* 头部样式 */
-        header {
-            padding: 1.5rem 2rem;
-            background-color: white;
-            border-bottom: 1px solid #eaeaea;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        
-        .header-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-        }
-        
-        .logo-link {
-            display: inline-block;
-            text-decoration: none;
-        }
-        
-        .logo-image {
-            height: 4rem; /* 增大logo */
-            width: auto;
-            display: block;
-            max-height: 5rem;
-            object-fit: contain;
-        }
-        
-        /* 主要内容区 */
-        .container {
-            max-width: 1400px;
-            margin: 40px auto;
-            padding: 0 2rem;
-        }
-        
-        .page-title {
-            text-align: center;
-            margin-bottom: 40px;
-            font-size: 3rem; /* 增大标题 */
-            color: #2c3e50;
-            position: relative;
-            padding-bottom: 20px;
-        }
-        
-        .page-title:after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 150px; /* 增大下划线 */
-            height: 4px;
-            background-color: #c0392b;
-        }
-        
-        /* 报纸列表样式 */
-        .newspaper-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); /* 增大卡片尺寸 */
-            gap: 40px;
-        }
-        
-        .newspaper-item {
-            background-color: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        
-        .newspaper-item:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-        }
-        
-        .newspaper-image {
-            height: 280px; /* 增大图片区域 */
-            background-color: #eee;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #777;
-            font-size: 1.5rem;
-            background-size: cover;
-            background-position: center;
-        }
-        
-        .newspaper-content {
-            padding: 30px;
-        }
-        
-        .newspaper-title {
-            font-size: 1.8rem; /* 增大标题 */
-            margin-bottom: 15px;
-            color: #2c3e50;
-        }
-        
-        .newspaper-date {
-            color: #7f8c8d;
-            font-size: 1.1rem;
-            margin-bottom: 20px;
-        }
-        
-        .newspaper-excerpt {
-            color: #555;
-            margin-bottom: 20px;
-            line-height: 1.6;
-            font-size: 1.1rem;
-        }
-        
-        .read-more {
-            display: inline-block;
-            background-color: #c0392b;
-            color: white;
-            padding: 12px 25px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1.1rem;
-            transition: background-color 0.3s;
-        }
-        
-        .read-more:hover {
-            background-color: #e74c3c;
-        }
-        
-        /* 页脚样式 */
-        footer {
-            background-color: #2c3e50;
-            color: white;
-            padding: 50px 0 30px;
-            margin-top: 70px;
-        }
-        
-        .footer-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* 增大页脚区域 */
-            gap: 40px;
-            padding: 0 2rem;
-        }
-        
-        .footer-section h3 {
-            font-size: 1.5rem;
-            margin-bottom: 25px;
-            color: #c0392b;
-            position: relative;
-            padding-bottom: 15px;
-        }
-        
-        .footer-section h3:after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 50px;
-            height: 3px;
-            background-color: #c0392b;
-        }
-        
-        .footer-section p, .footer-section a {
-            color: #ecf0f1;
-            margin-bottom: 15px;
-            display: block;
-            text-decoration: none;
-            font-size: 1.1rem;
-        }
-        
-        .footer-section a:hover {
-            color: #c0392b;
-        }
-        
-        .copyright {
-            text-align: center;
-            margin-top: 40px;
-            padding-top: 25px;
-            border-top: 1px solid #34495e;
-            color: #bdc3c7;
-            font-size: 1rem;
-        }
-        
-        /* 响应式设计 */
-        @media (max-width: 768px) {
-            .header-container {
-                justify-content: center;
-            }
-            
-            .logo-image {
-                height: 3rem;
-                max-height: 3.5rem;
-            }
-            
-            .page-title {
-                font-size: 2.2rem;
-            }
-            
-            .newspaper-list {
-                grid-template-columns: 1fr;
-                gap: 30px;
-            }
-            
-            .newspaper-image {
-                height: 220px;
-            }
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>24点</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f4f1ec;
+    --surface: #ffffff;
+    --border: #ddd9d1;
+    --text: #2c2824;
+    --text2: #8a837a;
+    --accent: #3d6b5e;
+    --accent-light: #e8f0ee;
+    --shadow: 0 1px 3px rgba(44,40,36,0.08), 0 4px 16px rgba(44,40,36,0.06);
+    --shadow-card: 0 2px 8px rgba(44,40,36,0.1);
+  }
 
-        /* 2K屏幕优化 */
-        @media (min-width: 1920px) {
-            .header-container {
-                max-width: 1600px;
-            }
-            
-            .container {
-                max-width: 1600px;
-            }
-            
-            .newspaper-list {
-                grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
-                gap: 50px;
-            }
-            
-            .footer-container {
-                max-width: 1600px;
-            }
-        }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        /* 4K屏幕优化 */
-        @media (min-width: 2560px) {
-            .header-container {
-                max-width: 2000px;
-            }
-            
-            .container {
-                max-width: 2000px;
-            }
-            
-            .newspaper-list {
-                grid-template-columns: repeat(auto-fill, minmax(550px, 1fr));
-                gap: 60px;
-            }
-            
-            .footer-container {
-                max-width: 2000px;
-            }
-            
-            .logo-image {
-                height: 5rem;
-                max-height: 6rem;
-            }
-            
-            .page-title {
-                font-size: 3.5rem;
-            }
-        }
-    </style>
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 20px;
+  }
+
+  .container { width: 100%; max-width: 480px; }
+
+  /* Header */
+  header { text-align: center; margin-bottom: 40px; }
+
+  .title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 72px;
+    color: var(--text);
+    line-height: 1;
+    letter-spacing: -2px;
+  }
+
+  .title span { color: var(--accent); }
+
+  .subtitle {
+    font-size: 11px;
+    color: var(--text2);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-top: 8px;
+    font-weight: 300;
+  }
+
+  /* Score bar */
+  .score-bar {
+    display: flex;
+    gap: 1px;
+    background: var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 28px;
+    box-shadow: var(--shadow);
+  }
+
+  .score-item {
+    flex: 1;
+    background: var(--surface);
+    padding: 14px 10px;
+    text-align: center;
+  }
+
+  .score-item:first-child { border-radius: 14px 0 0 14px; }
+  .score-item:last-child  { border-radius: 0 14px 14px 0; }
+
+  .score-val {
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .score-lbl {
+    font-size: 10px;
+    color: var(--text2);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 3px;
+  }
+
+  /* Number cards */
+  .numbers-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  .num-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(32px, 7vw, 44px);
+    color: var(--text);
+    box-shadow: var(--shadow-card);
+    animation: slideIn 0.4s cubic-bezier(0.22,1,0.36,1) both;
+    position: relative;
+  }
+
+  .num-card::after {
+    content: '';
+    position: absolute;
+    bottom: 9px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 18px;
+    height: 2px;
+    background: var(--accent);
+    border-radius: 2px;
+    opacity: 0.35;
+  }
+
+  .num-card:nth-child(1) { animation-delay: 0.00s; }
+  .num-card:nth-child(2) { animation-delay: 0.06s; }
+  .num-card:nth-child(3) { animation-delay: 0.12s; }
+  .num-card:nth-child(4) { animation-delay: 0.18s; }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Answer panel */
+  .answer-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 22px;
+    margin-bottom: 14px;
+    box-shadow: var(--shadow);
+    min-height: 88px;
+  }
+
+  .answer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+
+  .answer-label {
+    font-size: 10px;
+    color: var(--text2);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .answer-badge {
+    font-size: 11px;
+    color: var(--accent);
+    background: var(--accent-light);
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-weight: 500;
+  }
+
+  .answer-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .answer-item {
+    background: var(--accent-light);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-family: 'DM Serif Display', serif;
+    font-size: 15px;
+    color: var(--accent);
+    animation: fadeIn 0.22s ease both;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .answer-item .idx {
+    font-size: 10px;
+    color: var(--text2);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    min-width: 18px;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateX(-4px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  .state-msg {
+    color: var(--text2);
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  /* Buttons */
+  .btn-row {
+    display: flex;
+    gap: 8px;
+  }
+
+  .btn {
+    flex: 1;
+    padding: 14px 16px;
+    border-radius: 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  .btn-primary:hover {
+    background: #2e5247;
+    box-shadow: 0 4px 14px rgba(61,107,94,0.28);
+    transform: translateY(-1px);
+  }
+
+  .btn-secondary {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text2);
+  }
+
+  .btn-secondary:hover:not(:disabled) {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-1px);
+  }
+
+  .btn:disabled { opacity: 0.38; cursor: default; }
+  .btn:active:not(:disabled) { transform: scale(0.98) !important; }
+</style>
 </head>
 <body>
-    <!-- 头部 -->
-    <header>
-        <div class="header-container">
-            <a href="#" class="logo-link">
-                <!-- 替换为您的报社logo图片 -->
-                <img src="logo.png" 
-                     alt="人人报社" class="logo-image">
-            </a>
-        </div>
-    </header>
+<div class="container">
 
-    <!-- 主要内容 -->
-    <div class="container">
-        <h2 class="page-title">最新报刊</h2>
-        
-        <div class="newspaper-list">
-            <!-- 报纸项目1 -->
-            <div class="newspaper-item">
-                <div class="newspaper-image" style="background-image: url('peopeo.png');">
-                    <!-- 图片背景 -->
-                </div>
-                <div class="newspaper-content">
-                    <h3 class="newspaper-title">人人日报</h3>
-                    <p class="newspaper-date">2011年11月14日(是的我穿越了)</p>
-                    <p class="newspaper-excerpt">本期聚焦2011年11月14日的人民日报</p>
-                    <a href="peopeo.png" class="read-more">阅读全文</a>
-                </div>
-            </div>
-            
-        </div>
+  <header>
+    <div class="title">二<span>十</span>四</div>
+    <div class="subtitle">武汉外校数学文化节</div>
+  </header>
+
+  <div class="score-bar">
+    <div class="score-item">
+      <div class="score-val" id="rounds">0</div>
+      <div class="score-lbl">局数</div>
     </div>
+    <div class="score-item">
+      <div class="score-val" id="solved">0</div>
+      <div class="score-lbl">已解</div>
+    </div>
+    <div class="score-item">
+      <div class="score-val" id="hints">0</div>
+      <div class="score-lbl">提示</div>
+    </div>
+  </div>
 
-    <!-- 页脚 -->
-    <footer>
-        <div class="footer-container">
-            <div class="footer-section">
-                <h3>关于我们</h3>
-                <p>人人报社成立于25年国庆节放假期间,致力于做出优秀的语文作业,记录时代变迁,传递社会价值。</p>
-            </div>
-            
-            <div class="footer-section">
-                <h3>联系我们</h3>
-                <p>地址：武汉市光谷大道46号</p>
-                <p>电话：(+44)07933 242406</p>
-                <p>邮箱：zym.qwq@gmail.com</p>
-            </div>
-            
-            <div class="footer-section">
-                <h3>快速链接</h3>
-                <a href="#">首页</a>
-                <a href="#">新闻中心</a>
-                <a href="#">专题报道</a>
-                <a href="#">投稿指南</a>
-            </div>
-            
-            <div class="footer-section">
-                <h3>关注我们</h3>
-                <a href="https://player.bilibili.com/player.html?isOutside=true&aid=80433022&bvid=BV1GJ411x7h7&cid=137649199&p=1">还真没有</a>
-            </div>
-        </div>
-        
-        <div class="copyright">
-            <p>&copy; 2025 人人报社 版权所有</p>
-        </div>
-    </footer>
+  <div class="numbers-grid" id="numGrid">
+    <div class="num-card">—</div>
+    <div class="num-card">—</div>
+    <div class="num-card">—</div>
+    <div class="num-card">—</div>
+  </div>
+
+  <div class="answer-section">
+    <div class="answer-header">
+      <div class="answer-label">解法</div>
+      <div class="answer-badge" id="answerBadge" style="display:none"></div>
+    </div>
+    <div id="answerContent">
+      <div class="state-msg">点击「新题目」开始游戏</div>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="newGame()">新题目</button>
+    <button class="btn btn-secondary" id="hintBtn" onclick="showAnswers()" disabled>查看解法</button>
+  </div>
+
+</div>
+
+<script>
+// ── 求解器（严格保证数字顺序与输入一致）─────────────────
+// 每个表达式携带 indices[]，合并时确保左侧所有下标 < 右侧所有下标
+
+function makeExpr(val, str, indices) {
+  return { val, str, indices: [...indices] };
+}
+
+function combine(a, b) {
+  // 判断 a 全在 b 左边，或 b 全在 a 左边
+  const aMax = Math.max(...a.indices);
+  const bMax = Math.max(...b.indices);
+  const aMin = Math.min(...a.indices);
+  const bMin = Math.min(...b.indices);
+
+  const out = [];
+
+  if (aMax < bMin) {
+    // 顺序: a op b
+    const [av, bv] = [a.val, b.val];
+    const ni = [...a.indices, ...b.indices];
+    out.push(makeExpr(av + bv, `(${a.str}+${b.str})`, ni));
+    out.push(makeExpr(av - bv, `(${a.str}-${b.str})`, ni));
+    out.push(makeExpr(av * bv, `(${a.str}×${b.str})`, ni));
+    if (bv !== 0) out.push(makeExpr(av / bv, `(${a.str}÷${b.str})`, ni));
+  } else if (bMax < aMin) {
+    // 顺序: b op a
+    const [av, bv] = [a.val, b.val];
+    const ni = [...b.indices, ...a.indices];
+    out.push(makeExpr(bv + av, `(${b.str}+${a.str})`, ni));
+    out.push(makeExpr(bv - av, `(${b.str}-${a.str})`, ni));
+    out.push(makeExpr(bv * av, `(${b.str}×${a.str})`, ni));
+    if (av !== 0) out.push(makeExpr(bv / av, `(${b.str}÷${a.str})`, ni));
+  }
+  // 如果 indices 交叉则跳过（不合法组合）
+
+  return out;
+}
+
+function solve24(inputNums) {
+  const resultSet = new Set();
+
+  function search(exprs) {
+    if (exprs.length === 1) {
+      if (Math.abs(exprs[0].val - 24) < 1e-9) {
+        // 去掉最外层多余括号
+        let s = exprs[0].str;
+        if (s.startsWith('(') && s.endsWith(')') && matchParen(s, 0) === s.length - 1) {
+          s = s.slice(1, -1);
+        }
+        resultSet.add(s);
+      }
+      return;
+    }
+    for (let i = 0; i < exprs.length; i++) {
+      for (let j = i + 1; j < exprs.length; j++) {
+        const rest = exprs.filter((_, k) => k !== i && k !== j);
+        for (const merged of combine(exprs[i], exprs[j])) {
+          search([...rest, merged]);
+        }
+      }
+    }
+  }
+
+  const initial = inputNums.map((n, i) => makeExpr(n, String(n), [i]));
+  search(initial);
+  return [...resultSet].sort();
+}
+
+function matchParen(s, open) {
+  let d = 0;
+  for (let i = open; i < s.length; i++) {
+    if (s[i] === '(') d++;
+    else if (s[i] === ')') { d--; if (d === 0) return i; }
+  }
+  return -1;
+}
+
+// ── 生成有解题目 ─────────────────────────────────────────
+function generatePuzzle() {
+  let nums, solutions, tries = 0;
+  do {
+    nums = Array.from({ length: 4 }, () => Math.floor(Math.random() * 13) + 1);
+    solutions = solve24(nums);
+    tries++;
+  } while (solutions.length === 0 && tries < 300);
+  return { nums, solutions };
+}
+
+// ── 状态 ────────────────────────────────────────────────
+const state = { nums: [], solutions: [], rounds: 0, solved: 0, hints: 0 };
+
+function updateScore() {
+  document.getElementById('rounds').textContent = state.rounds;
+  document.getElementById('solved').textContent = state.solved;
+  document.getElementById('hints').textContent = state.hints;
+}
+
+function renderNumbers(nums) {
+  const grid = document.getElementById('numGrid');
+  grid.innerHTML = nums.map(n => `<div class="num-card">${n}</div>`).join('');
+  grid.querySelectorAll('.num-card').forEach((el, i) => {
+    el.style.animationDelay = `${i * 0.06}s`;
+  });
+}
+
+function newGame() {
+  const { nums, solutions } = generatePuzzle();
+  state.nums = nums;
+  state.solutions = solutions;
+  state.rounds++;
+  updateScore();
+
+  renderNumbers(nums);
+
+  document.getElementById('answerBadge').style.display = 'none';
+  document.getElementById('answerContent').innerHTML =
+    `<div class="state-msg">共有 <strong style="color:var(--accent)">${solutions.length}</strong> 种解法，点击「查看解法」揭示</div>`;
+  document.getElementById('hintBtn').disabled = false;
+  document.getElementById('hintBtn').textContent = '查看解法';
+}
+
+function showAnswers() {
+  state.hints++;
+  state.solved++;
+  updateScore();
+
+  const list = state.solutions;
+  document.getElementById('answerBadge').textContent = `${list.length} 种`;
+  document.getElementById('answerBadge').style.display = '';
+
+  document.getElementById('answerContent').innerHTML =
+    `<ul class="answer-list">${list.map((s, i) =>
+      `<li class="answer-item" style="animation-delay:${i * 0.035}s">
+        <span class="idx">${i + 1}</span>${s} = 24
+      </li>`
+    ).join('')}</ul>`;
+
+  document.getElementById('hintBtn').disabled = true;
+  document.getElementById('hintBtn').textContent = '已显示';
+}
+
+window.onload = () => newGame();
+</script>
 </body>
 </html>
