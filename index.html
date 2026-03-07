@@ -381,6 +381,9 @@ body.pres-mode #togglePresBtn .arrow { transform: rotate(180deg); }
   </div>
 
   <div class="footer">Made with ♥ by <span>zym</span> &amp; <span>Claude</span></div>
+  <div class="footer" style="margin-top:6px;border-top:none;padding-top:0;font-size:10px;opacity:0.6">
+    CDN &amp; DNS powered by <span>Cloudflare</span>
+  </div>
 
 </div>
 </div>
@@ -458,6 +461,7 @@ body.pres-mode #togglePresBtn .arrow { transform: rotate(180deg); }
     </div>
 
     <div class="pres-footer">Made with ♥ by <span>zym</span> &amp; <span>Claude</span></div>
+    <div class="pres-footer" style="opacity:0.55;font-size:9px;margin-top:2px">CDN &amp; DNS · <span>Cloudflare</span></div>
 
   </div>
 </div>
@@ -510,43 +514,86 @@ function onSizeChange(val) {
 function numNode(val,idx)           { return {type:'num',val,idx}; }
 function opNode(op,left,right,val)  { return {type:'op',op,left,right,val}; }
 
-function treeToStr(node,parentOp,side) {
-  if (node.type==='num') return String(node.val);
-  const {op,left,right}=node;
-  const ls=treeToStr(left,op,'left'), rs=treeToStr(right,op,'right');
-  let wrap=false;
-  if (parentOp==='-'&&side==='right'&&(op==='+'||op==='-')) wrap=true;
-  if (parentOp==='÷'&&side==='right'&&(op==='+'||op==='-'||op==='×'||op==='÷')) wrap=true;
-  if ((parentOp==='×'||parentOp==='÷')&&(op==='+'||op==='-')) wrap=true;
-  return wrap ? `(${ls}${op}${rs})` : `${ls}${op}${rs}`;
+// ── 加减链展平 → 收集带符号项 ──────────────────────────
+function collectAddTerms(node, sign, out) {
+  if (node.type==='num') { out.push({sign, node}); return; }
+  if (node.op==='+') { collectAddTerms(node.left,sign,out); collectAddTerms(node.right,sign,out); }
+  else if (node.op==='-') { collectAddTerms(node.left,sign,out); collectAddTerms(node.right,sign==='+'?'-':'+',out); }
+  else out.push({sign, node});
 }
 
+// ── 乘除链展平 → 收集带符号因子（+表示乘，-表示除）──────
+function collectMulTerms(node, sign, out) {
+  if (node.type==='num') { out.push({sign, node}); return; }
+  if (node.op==='×') { collectMulTerms(node.left,sign,out); collectMulTerms(node.right,sign,out); }
+  else if (node.op==='÷') { collectMulTerms(node.left,sign,out); collectMulTerms(node.right,sign==='+'?'-':'+',out); }
+  else out.push({sign, node});
+}
+
+// ── 树 → 规范签名 ────────────────────────────────────────
 function treeSignature(node) {
-  if (node.type==='num') return `#${node.idx}`;
+  if (node.type==='num') return '#'+node.idx;
   const {op}=node;
   if (op==='+'||op==='-') {
     const terms=[];
-    function flatAS(n,sign) {
-      if (n.type==='num'){terms.push(sign+'#'+n.idx);return;}
-      if (n.op==='+'){flatAS(n.left,sign);flatAS(n.right,sign);}
-      else if (n.op==='-'){flatAS(n.left,sign);flatAS(n.right,sign==='+'?'-':'+');}
-      else terms.push(sign+'('+treeSignature(n)+')');
-    }
-    flatAS(node,'+');
-    terms.sort((a,b)=>{ if(a[0]!==b[0]) return a[0]==='+'?-1:1; return a<b?-1:1; });
-    return 'S['+terms.join(',')+']';
+    collectAddTerms(node,'+',terms);
+    const keys=terms.map(t=>t.sign+treeSignature(t.node));
+    keys.sort((a,b)=>{ if(a[0]!==b[0]) return a[0]==='+'?-1:1; return a<b?-1:1; });
+    return 'S['+keys.join(',')+']';
   }
-  if (op==='×') {
-    const factors=[];
-    function flatMul(n) {
-      if (n.type==='num'){factors.push('#'+n.idx);return;}
-      if (n.op==='×'){flatMul(n.left);flatMul(n.right);}
-      else factors.push('('+treeSignature(n)+')');
-    }
-    flatMul(node); factors.sort();
-    return 'P['+factors.join(',')+']';
+  if (op==='×'||op==='÷') {
+    const terms=[];
+    collectMulTerms(node,'+',terms);
+    // 正因子（×）和负因子（÷）分开排序后拼接
+    const pos=terms.filter(t=>t.sign==='+').map(t=>treeSignature(t.node)).sort();
+    const neg=terms.filter(t=>t.sign==='-').map(t=>treeSignature(t.node)).sort();
+    return 'M['+pos.join(',')+'/'+neg.join(',')+']';
   }
-  return `(${treeSignature(node.left)}${op}${treeSignature(node.right)})`;
+  return '('+treeSignature(node.left)+op+treeSignature(node.right)+')';
+}
+
+// ── 树 → 显示字符串（最简括号）─────────────────────────
+function treeToStr(node, parentOp, side) {
+  if (node.type==='num') return String(node.val);
+  const {op,left,right}=node;
+
+  if (op==='+'||op==='-') {
+    // 展平加减链，按原始下标顺序输出
+    const terms=[];
+    collectAddTerms(node,'+',terms);
+    // 重建字符串：第一项，后续项加符号
+    let s=treeToStr(terms[0].node,null,null);
+    for (let i=1;i<terms.length;i++) {
+      const t=terms[i];
+      const sub=treeToStr(t.node,op,'right'); // 若子节点是加减需括号
+      // 子节点是乘除不需括号；子节点是加减且符号为减需括号
+      const needWrap = (t.node.type==='op'&&(t.node.op==='+'||t.node.op==='-')&&t.sign==='-');
+      s += t.sign==='+'? '+'+( needWrap?'('+treeToStr(t.node,null,null)+')':treeToStr(t.node,null,null))
+                       : '-'+(needWrap?'('+treeToStr(t.node,null,null)+')':treeToStr(t.node,null,null));
+    }
+    // 如果父是乘除，整体需括号
+    if (parentOp==='×'||parentOp==='÷') return '('+s+')';
+    return s;
+  }
+
+  if (op==='×'||op==='÷') {
+    // 展平乘除链
+    const terms=[];
+    collectMulTerms(node,'+',terms);
+    let s='';
+    for (let i=0;i<terms.length;i++) {
+      const t=terms[i];
+      const sub=t.node;
+      // 加减子节点需括号
+      const needWrap=(sub.type==='op'&&(sub.op==='+'||sub.op==='-'));
+      const subStr=needWrap?'('+treeToStr(sub,null,null)+')':treeToStr(sub,null,null);
+      if (i===0) s=subStr;
+      else s+=(t.sign==='+'?'×':'÷')+subStr;
+    }
+    return s;
+  }
+
+  return treeToStr(left,op,'left')+op+treeToStr(right,op,'right');
 }
 
 function makeLeaf(val,idx) { return {val,tree:numNode(val,idx),indices:[idx]}; }
@@ -588,12 +635,24 @@ function solve24(inputNums) {
       }
   }
   search(inputNums.map((v,i)=>makeLeaf(v,i)));
-  return results.sort();
+  // 按复杂度升序排：括号少的在前，同复杂度内按字典序
+  return results.sort((a,b) => {
+    const ca=solutionComplexity(a), cb=solutionComplexity(b);
+    if (ca!==cb) return ca-cb;
+    // 同复杂度：括号总数少的在前
+    const pa=countParens(a), pb=countParens(b);
+    if (pa!==pb) return pa-pb;
+    return a<b?-1:1;
+  });
 }
 
 // ══════════════════════════════════
 // 难度
 // ══════════════════════════════════
+function countParens(s) {
+  let n=0; for(const c of s) if(c==='('||c===')') n++; return n;
+}
+
 function solutionComplexity(s) {
   if (!s.includes('×')&&!s.includes('÷')) return 0;
   let maxD=0,d=0;
@@ -604,16 +663,25 @@ function puzzleDifficulty(sols) { return Math.min(...sols.map(solutionComplexity
 
 function generatePuzzle(targetDiff) {
   let nums,solutions,tries=0;
+  // 严格匹配难度，不放宽，保证有解
   do {
     nums=Array.from({length:4},()=>Math.floor(Math.random()*13)+1);
     solutions=solve24(nums); tries++;
-  } while((solutions.length===0||puzzleDifficulty(solutions)!==targetDiff)&&tries<600);
-  if (tries>=600) {
+  } while((solutions.length===0||puzzleDifficulty(solutions)!==targetDiff)&&tries<2000);
+  // 2000次仍未找到精确匹配（极少发生），只保证有解且≥目标难度
+  if (solutions.length===0||puzzleDifficulty(solutions)!==targetDiff) {
     tries=0;
     do {
       nums=Array.from({length:4},()=>Math.floor(Math.random()*13)+1);
       solutions=solve24(nums); tries++;
-    } while((solutions.length===0||puzzleDifficulty(solutions)<targetDiff)&&tries<600);
+    } while((solutions.length===0||puzzleDifficulty(solutions)<targetDiff)&&tries<1000);
+  }
+  // 最终兜底：保证有解
+  if (solutions.length===0) {
+    do {
+      nums=Array.from({length:4},()=>Math.floor(Math.random()*13)+1);
+      solutions=solve24(nums);
+    } while(solutions.length===0);
   }
   return {nums,solutions};
 }
@@ -656,17 +724,25 @@ function updateScore() {
   });
 }
 
+const WELCOME=['I','❤','2','4'];
+
 function renderNumbers(nums) {
-  // normal grid
   const ng=document.getElementById('n-numGrid');
   ng.innerHTML=nums.map(n=>`<div class="num-card">${n}</div>`).join('');
   ng.querySelectorAll('.num-card').forEach((el,i)=>el.style.animationDelay=`${i*.06}s`);
-  // pres grid
   syncPresNums();
+}
+
+function renderWelcome() {
+  const ng=document.getElementById('n-numGrid');
+  ng.innerHTML=WELCOME.map(c=>`<div class="num-card" style="font-size:clamp(20px,4vw,32px);letter-spacing:-1px">${c}</div>`).join('');
+  const pg=document.getElementById('p-numGrid');
+  pg.innerHTML=WELCOME.map(c=>`<div class="pres-num-card" style="font-family:'DM Serif Display',serif;letter-spacing:-2px">${c}</div>`).join('');
 }
 
 function syncPresNums() {
   const pg=document.getElementById('p-numGrid');
+  if(state.nums.length===0){renderWelcome();return;}
   pg.innerHTML=state.nums.map(n=>`<div class="pres-num-card">${n}</div>`).join('');
   pg.querySelectorAll('.pres-num-card').forEach((el,i)=>el.style.animationDelay=`${i*.07}s`);
 }
@@ -704,7 +780,14 @@ function showAnswers() {
   renderAnswerContent(html, `${list.length} 种`, true);
 }
 
-window.onload=()=>newGame();
+window.onload=()=>{
+  renderWelcome();
+  renderAnswerContent('<div class="state-msg">点击「新题目」开始游戏</div>','',false);
+  ['n','p'].forEach(pfx=>{
+    const btn=document.getElementById(pfx+'-hintBtn');
+    if(btn){btn.disabled=true;btn.textContent='查看解法';}
+  });
+};
 </script>
 </body>
 </html>
