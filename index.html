@@ -654,11 +654,16 @@ function countParens(s) {
 }
 
 function solutionComplexity(s) {
-  if (!s.includes('×')&&!s.includes('÷')) return 0;
-  let maxD=0,d=0;
-  for (const c of s){if(c==='('){d++;maxD=Math.max(maxD,d);}else if(c===')') d--;}
-  return maxD<=1?1:2;
+  // 难度0：只需加减
+  if (!s.includes('×') && !s.includes('÷')) return 0;
+  
+  // 难度1：需要乘除，但不需要括号
+  if (!s.includes('(')) return 1;
+  
+  // 难度2：必须使用括号
+  return 2;
 }
+
 function puzzleDifficulty(sols) { return Math.min(...sols.map(solutionComplexity)); }
 
 function generatePuzzle(targetDiff) {
@@ -691,7 +696,7 @@ const DIFF_CONFIG=[
   {name:'中等',cls:'medium',color:'var(--medium)',fill:'50%' },
   {name:'困难',cls:'hard',  color:'var(--hard)',  fill:'100%'},
 ];
-const DIFF_LABELS=['只需加减','需要乘除','需要嵌套括号'];
+const DIFF_LABELS=['只需加减','需要乘除','需要括号'];
 let currentDiff=0;
 
 function onDiffChange(val) {
@@ -724,7 +729,7 @@ function updateScore() {
   });
 }
 
-const WELCOME=['I','❤','2','4'];
+const WELCOME=['咕','咕','噶','噶'];
 
 function renderNumbers(nums) {
   const ng=document.getElementById('n-numGrid');
